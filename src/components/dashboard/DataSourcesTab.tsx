@@ -8,7 +8,7 @@ export const DataSourcesTab = () => {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <KPICard
           title="Glossary Terms"
           value="1,247"
@@ -28,14 +28,6 @@ export const DataSourcesTab = () => {
           value="28"
           subtitle="Last updated 2 days ago"
           icon={Shield}
-        />
-        <KPICard
-          title="Avg Match Score"
-          value="76%"
-          subtitle="Target: 85%"
-          icon={CheckCircle}
-          variant="warning"
-          trend={{ value: 3.1, isPositive: true }}
         />
       </div>
 
