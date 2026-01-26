@@ -83,6 +83,33 @@ export const DataSourcesTab = () => {
           </div>
         </div>
         
+        {/* Overall Average Match Score Summary */}
+        <div className="flex items-center justify-between p-4 rounded-lg bg-primary/5 border border-primary/20 mb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-primary/20">
+              <CheckCircle className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">Overall Avg Match Score</p>
+              <p className="text-2xl font-bold text-foreground">78.4%</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-6 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-success"></span>
+              <span className="text-muted-foreground">847 High</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-warning"></span>
+              <span className="text-muted-foreground">312 Medium</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-destructive"></span>
+              <span className="text-muted-foreground">88 Low</span>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="p-4 rounded-lg bg-muted/30 border border-border/30">
             <div className="flex items-center gap-2 mb-2">
