@@ -4,6 +4,7 @@ import { AlertsPanel } from "./AlertsPanel";
 import { 
   BarChart3, 
   TrendingUp, 
+  Target,
   AlertTriangle,
   Layers,
   Database
@@ -53,15 +54,23 @@ export const DomainKPIsTab = () => {
       {/* Overall KPIs */}
       <div>
         <h2 className="text-xl font-semibold text-foreground mb-4">Overall Performance</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           <KPICard
             title="Overall Score"
             value={totalFields > 0 ? `${overallScore}%` : "--"}
-            subtitle="Across all domains"
+            subtitle={totalFields > 0 ? "Weighted metadata quality" : "No data uploaded"}
             icon={BarChart3}
             variant={overallScore >= 80 ? "success" : overallScore >= 60 ? "warning" : totalFields > 0 ? "danger" : "default"}
             trend={totalFields > 0 ? { value: 3.8, isPositive: true } : undefined}
-            tooltip="Weighted average of domain-level metadata coverage scores. Reflects how well business and technical metadata align with AI-generated descriptions."
+            tooltip="Weighted average of Glossary Coverage (50%) and Dictionary Coverage (50%). Reflects how well business and technical metadata align with AI-generated descriptions."
+          />
+          <KPICard
+            title="Glossary Coverage"
+            value={glossaryFieldCount > 0 ? `${glossaryCoverage}%` : "--"}
+            subtitle={glossaryFieldCount > 0 ? `${glossaryFieldCount} fields mapped` : "No data uploaded"}
+            icon={Target}
+            trend={glossaryFieldCount > 0 ? { value: 2.4, isPositive: true } : undefined}
+            tooltip="Percentage of business glossary terms that have high-confidence matches (≥80%) with AI-generated definitions. Measures semantic alignment of business terminology."
           />
           <KPICard
             title="Dictionary Coverage"
