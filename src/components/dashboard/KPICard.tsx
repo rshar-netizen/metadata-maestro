@@ -1,5 +1,11 @@
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface KPICardProps {
   title: string;
@@ -11,9 +17,10 @@ interface KPICardProps {
     isPositive: boolean;
   };
   variant?: "default" | "success" | "warning" | "danger";
+  tooltip?: string;
 }
 
-export const KPICard = ({ title, value, subtitle, icon: Icon, trend, variant = "default" }: KPICardProps) => {
+export const KPICard = ({ title, value, subtitle, icon: Icon, trend, variant = "default", tooltip }: KPICardProps) => {
   const variantStyles = {
     default: "border-border/50",
     success: "border-success/30 bg-success/5",
@@ -31,8 +38,22 @@ export const KPICard = ({ title, value, subtitle, icon: Icon, trend, variant = "
   return (
     <div className={cn("kpi-card", variantStyles[variant])}>
       <div className="flex items-start justify-between mb-4">
-        <div className={cn("p-3 rounded-lg", iconStyles[variant])}>
-          <Icon className="w-5 h-5" />
+        <div className="flex items-center gap-2">
+          <div className={cn("p-3 rounded-lg", iconStyles[variant])}>
+            <Icon className="w-5 h-5" />
+          </div>
+          {tooltip && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="w-4 h-4 text-muted-foreground/60 hover:text-primary cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p className="text-sm">{tooltip}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </div>
         {trend && (
           <span className={cn(
