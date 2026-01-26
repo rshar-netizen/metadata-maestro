@@ -1,7 +1,6 @@
 import { FileUploadZone } from "./FileUploadZone";
-import { MetadataComparisonTable } from "./MetadataComparisonTable";
-import { Database, Table, Layers, FolderTree, CheckCircle, AlertTriangle, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { MetadataValidationTabs } from "./MetadataValidationTabs";
+import { Database, Table, Layers, FolderTree } from "lucide-react";
 
 export const DataSourcesTab = () => {
   return (
@@ -90,66 +89,8 @@ export const DataSourcesTab = () => {
         </div>
       </div>
 
-      {/* Comparison Actions */}
-      <div className="card-glass rounded-xl p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="text-lg font-semibold text-foreground">Metadata Validation</h3>
-            <p className="text-sm text-muted-foreground">
-              Compare and analyze metadata across your data sources
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <Button variant="outline" className="gap-2">
-              <Clock className="w-4 h-4" />
-              Schedule Validation
-            </Button>
-            <Button className="gap-2 bg-primary text-primary-foreground glow-primary">
-              <CheckCircle className="w-4 h-4" />
-              Run Comparison
-            </Button>
-          </div>
-        </div>
-        
-        {/* Overall Summary Line */}
-        <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 border border-border/30 mb-4">
-          <CheckCircle className="w-4 h-4 text-primary" />
-          <p className="text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">1,247 fields</span> analyzed across 156 tables — 
-            Average match score: <span className="font-semibold text-primary">78.4%</span>
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="p-4 rounded-lg bg-muted/30 border border-border/30">
-            <div className="flex items-center gap-2 mb-2">
-              <CheckCircle className="w-4 h-4 text-success" />
-              <span className="text-sm font-medium text-foreground">High Match (≥80%)</span>
-            </div>
-            <p className="text-2xl font-bold text-success">847</p>
-            <p className="text-xs text-muted-foreground">fields validated</p>
-          </div>
-          <div className="p-4 rounded-lg bg-muted/30 border border-border/30">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle className="w-4 h-4 text-warning" />
-              <span className="text-sm font-medium text-foreground">Medium Match (60-79%)</span>
-            </div>
-            <p className="text-2xl font-bold text-warning">312</p>
-            <p className="text-xs text-muted-foreground">fields need review</p>
-          </div>
-          <div className="p-4 rounded-lg bg-muted/30 border border-border/30">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle className="w-4 h-4 text-destructive" />
-              <span className="text-sm font-medium text-foreground">Low Match (&lt;60%)</span>
-            </div>
-            <p className="text-2xl font-bold text-destructive">88</p>
-            <p className="text-xs text-muted-foreground">fields require attention</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Comparison Table */}
-      <MetadataComparisonTable />
+      {/* Metadata Validation Tabs */}
+      <MetadataValidationTabs />
     </div>
   );
 };
