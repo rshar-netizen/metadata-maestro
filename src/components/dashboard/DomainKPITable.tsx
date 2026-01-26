@@ -312,13 +312,7 @@ export const DomainKPITable = () => {
               <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 <HeaderWithTooltip 
                   label="Overall Score" 
-                  tooltip="Average of Glossary Match and Dictionary Match scores. Represents the combined metadata quality for the domain."
-                />
-              </th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                <HeaderWithTooltip 
-                  label="Glossary Match" 
-                  tooltip="Percentage of business glossary definitions that align with AI-generated descriptions. Higher scores indicate better semantic consistency."
+                  tooltip="Dictionary Match score representing the metadata quality for the domain."
                 />
               </th>
               <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -377,22 +371,15 @@ export const DomainKPITable = () => {
                     </td>
                     <td className="px-4 py-4">
                       <div className="flex flex-col items-center gap-1">
-                        <span className={cn("text-lg font-bold", getScoreColor(domain.overallScore))}>
-                          {domain.overallScore > 0 ? `${domain.overallScore}%` : "--"}
+                        <span className={cn("text-lg font-bold", getScoreColor(domain.dictionaryScore))}>
+                          {domain.dictionaryScore > 0 ? `${domain.dictionaryScore}%` : "--"}
                         </span>
                         <div className="score-bar w-16">
                           <div 
-                            className={cn("score-fill", getScoreBg(domain.overallScore))}
-                            style={{ width: `${domain.overallScore}%` }}
+                            className={cn("score-fill", getScoreBg(domain.dictionaryScore))}
+                            style={{ width: `${domain.dictionaryScore}%` }}
                           />
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex flex-col items-center gap-1">
-                        <span className={cn("font-semibold", getScoreColor(domain.glossaryScore))}>
-                          {domain.glossaryScore > 0 ? `${domain.glossaryScore}%` : "--"}
-                        </span>
                       </div>
                     </td>
                     <td className="px-4 py-4">
@@ -430,13 +417,6 @@ export const DomainKPITable = () => {
                         <span className="text-xs text-muted-foreground">{subDomain.lastUpdated}</span>
                       </td>
                       <td className="px-4 py-3 text-center">—</td>
-                      <td className="px-4 py-3">
-                        <div className="flex flex-col items-center gap-1">
-                          <span className={cn("text-sm font-medium", getScoreColor(subDomain.glossaryScore))}>
-                            {subDomain.glossaryScore > 0 ? `${subDomain.glossaryScore}%` : "--"}
-                          </span>
-                        </div>
-                      </td>
                       <td className="px-4 py-3">
                         <div className="flex flex-col items-center gap-1">
                           <span className={cn("text-sm font-medium", getScoreColor(subDomain.dictionaryScore))}>
