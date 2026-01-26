@@ -18,9 +18,9 @@ const alerts: Alert[] = [
     id: "1",
     type: "critical",
     title: "PII Compliance Risk Detected",
-    description: "SSN field in Customer dataset lacks proper masking policy",
-    domain: "Customer Data",
-    timestamp: "2 min ago",
+    description: "Covenant definitions in Private Credit domain lacking proper sensitivity classification",
+    domain: "Private Credit",
+    timestamp: "5 min ago",
     assignee: "Sarah Chen",
     acknowledged: false
   },
@@ -28,8 +28,8 @@ const alerts: Alert[] = [
     id: "2",
     type: "warning",
     title: "Metadata Match Score Below Threshold",
-    description: "Risk metrics domain showing <60% match score average",
-    domain: "Risk Analytics",
+    description: "Private Credit Borrower subdomain showing <60% glossary match score",
+    domain: "Private Credit",
     timestamp: "15 min ago",
     acknowledged: false
   },
@@ -37,18 +37,27 @@ const alerts: Alert[] = [
     id: "3",
     type: "warning",
     title: "Data Dictionary Update Required",
-    description: "12 new fields detected without definitions in Portfolio domain",
-    domain: "Portfolio Management",
+    description: "8 new fields detected in alpha_signal table without definitions",
+    domain: "Jennison",
     timestamp: "1 hour ago",
     assignee: "Mike Johnson",
     acknowledged: true
   },
   {
     id: "4",
+    type: "warning",
+    title: "Factor Model Documentation Gap",
+    description: "PGIM Quant factor_model table missing technical specifications",
+    domain: "PGIM Quant",
+    timestamp: "2 hours ago",
+    acknowledged: false
+  },
+  {
+    id: "5",
     type: "info",
     title: "Scheduled Validation Complete",
-    description: "Weekly metadata validation completed with 94% success rate",
-    domain: "All Domains",
+    description: "Weekly metadata validation for Real Estate domain completed with 85% success rate",
+    domain: "Real Estate",
     timestamp: "3 hours ago",
     acknowledged: true
   }
