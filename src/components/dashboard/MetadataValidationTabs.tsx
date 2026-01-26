@@ -24,6 +24,7 @@ interface ValidationTabProps {
   totalFields: number;
   totalTables: number;
   avgMatchScore: number;
+  tableType: "glossary" | "dictionary";
 }
 
 const getVariantColor = (variant: ValidationKPI["variant"]) => {
@@ -39,7 +40,7 @@ const getVariantColor = (variant: ValidationKPI["variant"]) => {
   }
 };
 
-const ValidationTabContent = ({ title, description, kpis, totalFields, totalTables, avgMatchScore }: ValidationTabProps) => {
+const ValidationTabContent = ({ title, description, kpis, totalFields, totalTables, avgMatchScore, tableType }: ValidationTabProps) => {
   return (
     <div className="space-y-6">
       {/* Header with Actions */}
@@ -96,7 +97,7 @@ const ValidationTabContent = ({ title, description, kpis, totalFields, totalTabl
       </div>
 
       {/* Comparison Table */}
-      <MetadataComparisonTable />
+      <MetadataComparisonTable type={tableType} />
     </div>
   );
 };
@@ -174,6 +175,7 @@ export const MetadataValidationTabs = () => {
             totalFields={623}
             totalTables={78}
             avgMatchScore={76.8}
+            tableType="glossary"
           />
         </TabsContent>
 
@@ -185,6 +187,7 @@ export const MetadataValidationTabs = () => {
             totalFields={772}
             totalTables={98}
             avgMatchScore={81.2}
+            tableType="dictionary"
           />
         </TabsContent>
       </Tabs>
