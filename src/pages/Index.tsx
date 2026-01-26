@@ -27,7 +27,7 @@ const Index = () => {
                   <ShieldCheck className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-foreground">Data Governance</h1>
+                  <h1 className="text-xl font-bold text-foreground">Metadata Validation and Tracking</h1>
                   <p className="text-xs text-muted-foreground">Metadata Validation Platform</p>
                 </div>
               </div>
