@@ -1,8 +1,14 @@
 import { FileUploadZone } from "./FileUploadZone";
 import { MetadataValidationTabs } from "./MetadataValidationTabs";
 import { PolicyValidationPanel } from "./PolicyValidationPanel";
-import { Target, BookOpen, Database, Clock, AlertTriangle, TrendingUp } from "lucide-react";
+import { Target, BookOpen, Database, Clock, AlertTriangle, TrendingUp, Info } from "lucide-react";
 import { useMetadata } from "@/contexts/MetadataContext";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const DataSourcesTab = () => {
   const { 
@@ -29,6 +35,16 @@ export const DataSourcesTab = () => {
           <div className="flex items-center gap-2 mb-2">
             <Target className="w-4 h-4 text-primary" />
             <span className="text-xs text-muted-foreground">Overall Metadata Accuracy</span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p className="text-sm">Average of Glossary Accuracy (50%) and Data Dictionary Accuracy (50%). Represents overall alignment between uploaded metadata and AI-generated definitions.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
           <p className="text-2xl font-bold text-foreground">
             {overallAccuracy > 0 ? `${overallAccuracy}%` : "--"}
@@ -45,6 +61,16 @@ export const DataSourcesTab = () => {
           <div className="flex items-center gap-2 mb-2">
             <BookOpen className="w-4 h-4 text-info" />
             <span className="text-xs text-muted-foreground">Glossary Accuracy</span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p className="text-sm">Percentage of business glossary terms with high-confidence semantic matches (≥80%) to AI-generated definitions. Measures how well business terminology aligns with standard definitions.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
           <p className="text-2xl font-bold text-foreground">
             {glossaryData ? `${glossaryAccuracy}%` : "--"}
@@ -61,6 +87,16 @@ export const DataSourcesTab = () => {
           <div className="flex items-center gap-2 mb-2">
             <Database className="w-4 h-4 text-primary" />
             <span className="text-xs text-muted-foreground">Data Dictionary Accuracy</span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p className="text-sm">Composite score: 40% description match + 30% data type accuracy + 30% sensitivity classification. Measures technical metadata quality and schema alignment.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
           <p className="text-2xl font-bold text-foreground">
             {dictionaryData ? `${dictionaryAccuracy}%` : "--"}
