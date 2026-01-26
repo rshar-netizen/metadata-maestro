@@ -1,5 +1,6 @@
 import { FileUploadZone } from "./FileUploadZone";
 import { MetadataValidationTabs } from "./MetadataValidationTabs";
+import { PolicyValidationPanel } from "./PolicyValidationPanel";
 import { Target, BookOpen, Database, Clock, AlertTriangle, TrendingUp } from "lucide-react";
 import { useMetadata } from "@/contexts/MetadataContext";
 
@@ -7,8 +8,10 @@ export const DataSourcesTab = () => {
   const { 
     handleGlossaryUpload, 
     handleDictionaryUpload,
+    handlePolicyUpload,
     glossaryData,
-    dictionaryData 
+    dictionaryData,
+    policyData
   } = useMetadata();
 
   // Calculate dynamic accuracy based on uploaded data
@@ -76,10 +79,10 @@ export const DataSourcesTab = () => {
             <span className="text-xs text-muted-foreground">Last Scan</span>
           </div>
           <p className="text-lg font-bold text-foreground">
-            {glossaryData || dictionaryData ? "Just now" : "--"}
+            {glossaryData || dictionaryData || policyData ? "Just now" : "--"}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
-            {glossaryData || dictionaryData ? "manual upload" : "no data"}
+            {glossaryData || dictionaryData || policyData ? "manual upload" : "no data"}
           </p>
         </div>
 
@@ -128,6 +131,9 @@ export const DataSourcesTab = () => {
             description="Upload compliance and governance policy documents"
             acceptedFormats="PDF, DOCX, TXT"
             accept=".pdf,.docx,.txt"
+            onFileUpload={async (file) => {
+              await handlePolicyUpload(file);
+            }}
           />
           <FileUploadZone
             title="Sample Dataset"
@@ -137,6 +143,9 @@ export const DataSourcesTab = () => {
           />
         </div>
       </div>
+
+      {/* Policy Validation Panel - Shows when policy data is uploaded */}
+      {policyData && <PolicyValidationPanel policyData={policyData} />}
 
       {/* Metadata Validation Tabs */}
       <MetadataValidationTabs />
