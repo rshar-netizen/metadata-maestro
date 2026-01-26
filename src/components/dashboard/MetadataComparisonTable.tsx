@@ -494,31 +494,163 @@ interface MetadataComparisonTableProps {
 
 export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) => {
   const data = type === "glossary" ? glossaryMockData : dictionaryMockData;
-  
-  const config = {
-    glossary: {
-      title: "Glossary Definition Analysis",
-      subtitle: "Comparing business glossary terms with AI-generated semantic definitions",
-      originalHeader: "Glossary Definition",
-      generatedHeader: "AI-Generated Definition",
-      matchTooltip: "Composite score: Definition match (60%), Type match (20%), Sensitivity match (20%). Reflects overall metadata alignment quality."
-    },
-    dictionary: {
-      title: "Data Dictionary Analysis",
-      subtitle: "Comparing technical field specifications with AI-generated schema analysis",
-      originalHeader: "Dictionary Specification",
-      generatedHeader: "AI-Generated Specification",
-      matchTooltip: "Composite score: Definition match (60%), Type match (20%), Sensitivity match (20%). Reflects overall technical documentation accuracy."
-    }
-  };
 
-  const { title, subtitle, originalHeader, generatedHeader, matchTooltip } = config[type];
+  if (type === "glossary") {
+    return (
+      <div className="card-glass rounded-xl overflow-hidden">
+        <div className="p-6 border-b border-border/30">
+          <h3 className="text-lg font-semibold text-foreground">Business Glossary Validation</h3>
+          <p className="text-sm text-muted-foreground mt-1">Field names from business glossary compared with AI-generated definitions</p>
+        </div>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-muted/30">
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Field Name</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Table</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Glossary Definition</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">AI-Generated Definition</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <div className="flex items-center gap-1">
+                    Type
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Compares glossary data type vs. AI-detected type</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <div className="flex items-center gap-1">
+                    Sensitivity
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Compares glossary sensitivity vs. AI-detected classification</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                </th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <div className="flex items-center justify-center gap-1">
+                    Match Score
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs">
+                          <p>Composite score: Definition (60%) + Type (20%) + Sensitivity (20%)</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((row, index) => {
+                const overallScore = calculateOverallScore(row);
+                const ScoreIcon = getScoreIcon(overallScore);
+                return (
+                  <tr key={index} className="data-table-row">
+                    <td className="px-4 py-4">
+                      <code className="text-sm font-mono text-primary bg-primary/10 px-2 py-1 rounded">
+                        {row.fieldName}
+                      </code>
+                    </td>
+                    <td className="px-4 py-4">
+                      <span className="text-xs font-medium text-info bg-info/10 px-2 py-1 rounded">
+                        {row.tableName}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4 max-w-xs">
+                      <p className="text-sm text-foreground">{row.originalDescription}</p>
+                    </td>
+                    <td className="px-4 py-4 max-w-xs">
+                      <p className="text-sm text-foreground">{row.generatedDescription}</p>
+                      <div className="flex items-start gap-1 mt-2">
+                        <Info className="w-3 h-3 text-info mt-0.5 flex-shrink-0" />
+                        <p className="text-xs text-muted-foreground">{row.explanation}</p>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded">
+                          {row.originalDataType}
+                        </span>
+                        <span className={cn(
+                          "text-xs font-medium px-2 py-1 rounded",
+                          row.typeMatch 
+                            ? "text-success bg-success/10" 
+                            : "text-destructive bg-destructive/10"
+                        )}>
+                          {row.generatedDataType}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex flex-col gap-1">
+                        <span className={cn("text-xs font-medium px-2 py-1 rounded", getSensitivityBadge(row.originalSensitivity))}>
+                          {row.originalSensitivity}
+                        </span>
+                        <span className={cn(
+                          "text-xs font-medium px-2 py-1 rounded",
+                          row.sensitivityMatch 
+                            ? "text-success bg-success/10" 
+                            : "text-destructive bg-destructive/10"
+                        )}>
+                          {row.generatedSensitivity}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="flex items-center gap-2">
+                          <ScoreIcon className={cn("w-4 h-4", getScoreColor(overallScore))} />
+                          <span className={cn("text-lg font-bold", getScoreColor(overallScore))}>
+                            {overallScore}%
+                          </span>
+                        </div>
+                        <div className="score-bar w-16">
+                          <div 
+                            className={cn("score-fill", getScoreBg(overallScore))}
+                            style={{ width: `${overallScore}%` }}
+                          />
+                        </div>
+                        <div className="flex gap-1 text-[10px]">
+                          <span className={row.typeMatch ? "text-success" : "text-destructive"}>T</span>
+                          <span className="text-muted-foreground">|</span>
+                          <span className={row.sensitivityMatch ? "text-success" : "text-destructive"}>S</span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
 
+  // Data Dictionary view
   return (
     <div className="card-glass rounded-xl overflow-hidden">
       <div className="p-6 border-b border-border/30">
-        <h3 className="text-lg font-semibold text-foreground">{title}</h3>
-        <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
+        <h3 className="text-lg font-semibold text-foreground">Data Dictionary Analysis</h3>
+        <p className="text-sm text-muted-foreground mt-1">Comparing technical field specifications with AI-generated schema analysis</p>
       </div>
       
       <div className="overflow-x-auto">
@@ -557,8 +689,8 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
                   </TooltipProvider>
                 </div>
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{originalHeader}</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{generatedHeader}</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Dictionary Specification</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">AI-Generated Specification</th>
               <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 <div className="flex items-center justify-center gap-1">
                   Match Score
@@ -568,7 +700,7 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
                         <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
-                        <p>{matchTooltip}</p>
+                        <p>Composite score: Definition match (60%), Type match (20%), Sensitivity match (20%). Reflects overall technical documentation accuracy.</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
