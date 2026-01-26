@@ -14,9 +14,6 @@ interface FieldComparison {
   matchScore: number;
   explanation: string;
   dataType: string;
-  completeness: number;
-  consistency: number;
-  uniqueness: number;
 }
 
 const mockData: FieldComparison[] = [
@@ -26,10 +23,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Primary key uniquely identifying each exposure record in the system",
     matchScore: 94,
     explanation: "High semantic alignment with minor phrasing differences",
-    dataType: "VARCHAR",
-    completeness: 100,
-    consistency: 99,
-    uniqueness: 100
+    dataType: "VARCHAR"
   },
   {
     fieldName: "client_id",
@@ -37,10 +31,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Unique identifier linking to the master client record",
     matchScore: 88,
     explanation: "Good alignment, generated adds foreign key context",
-    dataType: "VARCHAR",
-    completeness: 100,
-    consistency: 98,
-    uniqueness: 85
+    dataType: "VARCHAR"
   },
   {
     fieldName: "client_name",
@@ -48,10 +39,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Legal or registered name of the client entity",
     matchScore: 82,
     explanation: "Generated specifies legal naming context",
-    dataType: "VARCHAR",
-    completeness: 99,
-    consistency: 92,
-    uniqueness: 78
+    dataType: "VARCHAR"
   },
   {
     fieldName: "parent_client_id",
@@ -59,10 +47,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Foreign key referencing the parent client in hierarchical structure",
     matchScore: 75,
     explanation: "Original lacks hierarchical relationship context",
-    dataType: "VARCHAR",
-    completeness: 72,
-    consistency: 95,
-    uniqueness: 45
+    dataType: "VARCHAR"
   },
   {
     fieldName: "affiliate",
@@ -70,10 +55,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Boolean flag indicating if client is an affiliate of parent organization",
     matchScore: 68,
     explanation: "Original missing data type and business logic context",
-    dataType: "BOOLEAN",
-    completeness: 100,
-    consistency: 100,
-    uniqueness: 8
+    dataType: "BOOLEAN"
   },
   {
     fieldName: "relationship_owner",
@@ -81,10 +63,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Primary relationship manager responsible for client engagement",
     matchScore: 71,
     explanation: "Generated adds role specificity and accountability context",
-    dataType: "VARCHAR",
-    completeness: 95,
-    consistency: 88,
-    uniqueness: 32
+    dataType: "VARCHAR"
   },
   {
     fieldName: "mandate_id",
@@ -92,10 +71,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Unique identifier for investment mandate agreement",
     matchScore: 85,
     explanation: "Good alignment with investment context added",
-    dataType: "VARCHAR",
-    completeness: 100,
-    consistency: 97,
-    uniqueness: 100
+    dataType: "VARCHAR"
   },
   {
     fieldName: "mandate_status",
@@ -103,10 +79,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Current lifecycle status of mandate (Active/Pending/Terminated/Suspended)",
     matchScore: 72,
     explanation: "Original lacks enumeration of valid status values",
-    dataType: "VARCHAR",
-    completeness: 100,
-    consistency: 100,
-    uniqueness: 5
+    dataType: "VARCHAR"
   },
   {
     fieldName: "exposure_category",
@@ -114,10 +87,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Classification of exposure type for risk aggregation purposes",
     matchScore: 65,
     explanation: "Missing risk management and aggregation context",
-    dataType: "VARCHAR",
-    completeness: 98,
-    consistency: 94,
-    uniqueness: 12
+    dataType: "VARCHAR"
   },
   {
     fieldName: "asset_class",
@@ -125,10 +95,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Primary asset class categorization (Equity/Fixed Income/Alternatives/Cash)",
     matchScore: 78,
     explanation: "Generated provides enumeration of standard classifications",
-    dataType: "VARCHAR",
-    completeness: 100,
-    consistency: 100,
-    uniqueness: 6
+    dataType: "VARCHAR"
   },
   {
     fieldName: "investment_strategy",
@@ -136,10 +103,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Defined investment strategy aligned with mandate objectives",
     matchScore: 74,
     explanation: "Original uses informal terminology vs formal strategy definition",
-    dataType: "VARCHAR",
-    completeness: 97,
-    consistency: 91,
-    uniqueness: 18
+    dataType: "VARCHAR"
   },
   {
     fieldName: "mandate_type",
@@ -147,10 +111,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Classification of mandate structure (Discretionary/Advisory/Sub-Advisory)",
     matchScore: 70,
     explanation: "Original lacks enumeration and structural context",
-    dataType: "VARCHAR",
-    completeness: 100,
-    consistency: 100,
-    uniqueness: 4
+    dataType: "VARCHAR"
   },
   {
     fieldName: "effective_start_date",
@@ -158,10 +119,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Date when mandate agreement becomes legally effective",
     matchScore: 62,
     explanation: "Original too generic, lacks legal/contractual context",
-    dataType: "DATE",
-    completeness: 100,
-    consistency: 98,
-    uniqueness: 67
+    dataType: "DATE"
   },
   {
     fieldName: "effective_end_date",
@@ -169,10 +127,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Date when mandate agreement terminates or expires",
     matchScore: 60,
     explanation: "Original too generic, lacks termination context",
-    dataType: "DATE",
-    completeness: 45,
-    consistency: 96,
-    uniqueness: 52
+    dataType: "DATE"
   },
   {
     fieldName: "as_of_date",
@@ -180,10 +135,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Reference date for which exposure and AUM values are calculated",
     matchScore: 76,
     explanation: "Generated adds calculation reference context",
-    dataType: "DATE",
-    completeness: 100,
-    consistency: 100,
-    uniqueness: 89
+    dataType: "DATE"
   },
   {
     fieldName: "aum_type",
@@ -191,10 +143,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Type classification of Assets Under Management (Regulatory/Discretionary/Advisory)",
     matchScore: 69,
     explanation: "Original lacks full form and enumeration",
-    dataType: "VARCHAR",
-    completeness: 100,
-    consistency: 100,
-    uniqueness: 4
+    dataType: "VARCHAR"
   },
   {
     fieldName: "aum_usd",
@@ -202,10 +151,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Total Assets Under Management converted to US Dollars",
     matchScore: 91,
     explanation: "High alignment with currency conversion context",
-    dataType: "DECIMAL",
-    completeness: 99,
-    consistency: 95,
-    uniqueness: 94
+    dataType: "DECIMAL"
   },
   {
     fieldName: "currency",
@@ -213,10 +159,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "ISO 4217 currency code for original denomination",
     matchScore: 83,
     explanation: "Generated adds ISO standard reference",
-    dataType: "VARCHAR",
-    completeness: 100,
-    consistency: 100,
-    uniqueness: 15
+    dataType: "VARCHAR"
   },
   {
     fieldName: "expected_close_date",
@@ -224,10 +167,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Projected date for mandate finalization or funding",
     matchScore: 58,
     explanation: "Original lacks business process context",
-    dataType: "DATE",
-    completeness: 68,
-    consistency: 82,
-    uniqueness: 71
+    dataType: "DATE"
   },
   {
     fieldName: "probability_weight",
@@ -235,10 +175,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Likelihood weighting (0-100%) applied to pipeline AUM projections",
     matchScore: 64,
     explanation: "Original missing scale definition and application context",
-    dataType: "DECIMAL",
-    completeness: 75,
-    consistency: 88,
-    uniqueness: 42
+    dataType: "DECIMAL"
   },
   {
     fieldName: "source_system",
@@ -246,10 +183,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Originating system identifier for data lineage tracking",
     matchScore: 79,
     explanation: "Generated adds data lineage context",
-    dataType: "VARCHAR",
-    completeness: 100,
-    consistency: 100,
-    uniqueness: 8
+    dataType: "VARCHAR"
   },
   {
     fieldName: "source_record_id",
@@ -257,10 +191,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Original record identifier from source system for audit trail",
     matchScore: 86,
     explanation: "Good alignment with audit context added",
-    dataType: "VARCHAR",
-    completeness: 100,
-    consistency: 97,
-    uniqueness: 100
+    dataType: "VARCHAR"
   },
   {
     fieldName: "source_confidence",
@@ -268,10 +199,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Quality confidence score (High/Medium/Low) from source system validation",
     matchScore: 67,
     explanation: "Original lacks enumeration and validation context",
-    dataType: "VARCHAR",
-    completeness: 92,
-    consistency: 85,
-    uniqueness: 4
+    dataType: "VARCHAR"
   },
   {
     fieldName: "notes",
@@ -279,10 +207,7 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Free-text field for supplementary information and exceptions",
     matchScore: 80,
     explanation: "Good alignment with purpose clarification",
-    dataType: "TEXT",
-    completeness: 35,
-    consistency: 45,
-    uniqueness: 88
+    dataType: "TEXT"
   }
 ];
 
@@ -337,51 +262,6 @@ export const MetadataComparisonTable = () => {
                   </TooltipProvider>
                 </div>
               </th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                <div className="flex items-center justify-center gap-1">
-                  Completeness
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-xs">
-                        <p>Percentage of records that have a non-null value. 100% means every row has data for this field.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              </th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                <div className="flex items-center justify-center gap-1">
-                  Consistency
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-xs">
-                        <p>Percentage of values following expected patterns and formats. High scores indicate uniform data quality.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              </th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                <div className="flex items-center justify-center gap-1">
-                  Uniqueness
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-xs">
-                        <p>Percentage of distinct values vs total records. Expected to be high for IDs and low for categorical fields.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              </th>
             </tr>
           </thead>
           <tbody>
@@ -423,45 +303,6 @@ export const MetadataComparisonTable = () => {
                         <div 
                           className={cn("score-fill", getScoreBg(row.matchScore))}
                           style={{ width: `${row.matchScore}%` }}
-                        />
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="flex flex-col items-center gap-1">
-                      <span className={cn("text-sm font-semibold", getScoreColor(row.completeness))}>
-                        {row.completeness}%
-                      </span>
-                      <div className="score-bar w-12">
-                        <div 
-                          className={cn("score-fill", getScoreBg(row.completeness))}
-                          style={{ width: `${row.completeness}%` }}
-                        />
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="flex flex-col items-center gap-1">
-                      <span className={cn("text-sm font-semibold", getScoreColor(row.consistency))}>
-                        {row.consistency}%
-                      </span>
-                      <div className="score-bar w-12">
-                        <div 
-                          className={cn("score-fill", getScoreBg(row.consistency))}
-                          style={{ width: `${row.consistency}%` }}
-                        />
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="flex flex-col items-center gap-1">
-                      <span className={cn("text-sm font-semibold", getScoreColor(row.uniqueness))}>
-                        {row.uniqueness}%
-                      </span>
-                      <div className="score-bar w-12">
-                        <div 
-                          className={cn("score-fill", getScoreBg(row.uniqueness))}
-                          style={{ width: `${row.uniqueness}%` }}
                         />
                       </div>
                     </div>
