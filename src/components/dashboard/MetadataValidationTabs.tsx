@@ -108,19 +108,19 @@ export const MetadataValidationTabs = () => {
   const glossaryKPIs: ValidationKPI[] = [
     {
       label: "High Match (≥80%)",
-      value: 423,
+      value: 6,
       tooltip: "Fields where the business glossary definition closely aligns with the AI-generated description. These fields have clear, well-documented business meaning.",
       variant: "success"
     },
     {
       label: "Medium Match (60-79%)",
-      value: 156,
+      value: 9,
       tooltip: "Fields with partial alignment between glossary and generated definitions. Review recommended to clarify terminology or add missing context.",
       variant: "warning"
     },
     {
       label: "Low Match (<60%)",
-      value: 44,
+      value: 0,
       tooltip: "Fields with significant gaps between glossary definitions and actual data usage. May indicate outdated glossary entries or undefined business terms.",
       variant: "danger"
     }
@@ -129,19 +129,19 @@ export const MetadataValidationTabs = () => {
   const dictionaryKPIs: ValidationKPI[] = [
     {
       label: "High Match (≥80%)",
-      value: 512,
+      value: 12,
       tooltip: "Technical field definitions that accurately describe the data structure, type, and constraints. These fields have comprehensive technical documentation.",
       variant: "success"
     },
     {
       label: "Medium Match (60-79%)",
-      value: 198,
+      value: 3,
       tooltip: "Fields with partial technical documentation. May be missing data type details, constraints, or relationship information.",
       variant: "warning"
     },
     {
       label: "Low Match (<60%)",
-      value: 62,
+      value: 0,
       tooltip: "Fields lacking adequate technical documentation. Requires updates to include proper data types, nullability, and relationship context.",
       variant: "danger"
     }
@@ -170,11 +170,11 @@ export const MetadataValidationTabs = () => {
         <TabsContent value="glossary" className="mt-0">
           <ValidationTabContent
             title="Business Glossary Validation"
-            description="Compare business terms and definitions with AI-generated semantic analysis"
+            description="Compare PGIM Real Estate business terms with AI-generated semantic analysis"
             kpis={glossaryKPIs}
-            totalFields={623}
-            totalTables={78}
-            avgMatchScore={76.8}
+            totalFields={15}
+            totalTables={8}
+            avgMatchScore={82.0}
             tableType="glossary"
           />
         </TabsContent>
@@ -182,11 +182,11 @@ export const MetadataValidationTabs = () => {
         <TabsContent value="dictionary" className="mt-0">
           <ValidationTabContent
             title="Data Dictionary Validation"
-            description="Compare technical field definitions with AI-generated schema analysis"
+            description="Compare technical field specifications with AI-generated schema analysis"
             kpis={dictionaryKPIs}
-            totalFields={772}
-            totalTables={98}
-            avgMatchScore={81.2}
+            totalFields={15}
+            totalTables={8}
+            avgMatchScore={88.2}
             tableType="dictionary"
           />
         </TabsContent>
