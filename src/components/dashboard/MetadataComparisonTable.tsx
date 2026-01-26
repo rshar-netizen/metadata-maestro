@@ -512,9 +512,23 @@ const generateAIDefinition = (fieldName: string, originalDef: string): { definit
   };
 };
 
+// Generate simulated AI description for dictionary
+const generateAIDescription = (fieldName: string, originalDesc: string): { description: string; score: number } => {
+  const baseScore = 60 + Math.floor(Math.random() * 35);
+  const aiDescriptions: Record<string, string> = {
+    default: `AI-analyzed: This field represents ${fieldName.replace(/_/g, ' ')} data used in business operations and reporting workflows.`
+  };
+  
+  return {
+    description: originalDesc 
+      ? `${originalDesc}. Additional context: Used for ${fieldName.replace(/_/g, ' ')} operations in data pipeline.`
+      : aiDescriptions.default,
+    score: baseScore
+  };
+};
+
 // Generate simulated AI specs for dictionary
-const generateAISpec = (fieldName: string, originalSpec: string, dataType: string): { spec: string; score: number; explanation: string; generatedType: string; typeMatch: boolean } => {
-  const baseScore = 65 + Math.floor(Math.random() * 30);
+const generateAISpec = (fieldName: string, originalSpec: string, dataType: string): { spec: string; generatedType: string; typeMatch: boolean } => {
   const typeVariations: Record<string, string[]> = {
     "string": ["VARCHAR(255)", "TEXT", "string"],
     "int": ["INTEGER", "BIGINT", "int"],
@@ -530,11 +544,34 @@ const generateAISpec = (fieldName: string, originalSpec: string, dataType: strin
   
   return {
     spec: `${generatedType}, ${originalSpec.includes("NOT NULL") ? "NOT NULL" : "nullable"}, indexed for queries`,
-    score: baseScore,
-    explanation: typeMatch ? "Technical specs align well" : "Type interpretation differs, review recommended",
     generatedType,
     typeMatch
   };
+};
+
+// Generate match score reasons based on component matches
+const generateMatchScoreReasons = (descriptionScore: number, typeMatch: boolean, sensitivityMatch: boolean): string[] => {
+  const reasons: string[] = [];
+  
+  if (descriptionScore < 70) {
+    reasons.push("Description alignment low, review recommended");
+  } else if (descriptionScore < 80) {
+    reasons.push("Partial description match, minor review suggested");
+  }
+  
+  if (!typeMatch) {
+    reasons.push("Type interpretation differs, review recommended");
+  }
+  
+  if (!sensitivityMatch) {
+    reasons.push("Sensitivity classification mismatch, verify policy");
+  }
+  
+  if (reasons.length === 0) {
+    reasons.push("All validations passed");
+  }
+  
+  return reasons;
 };
 
 export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) => {
@@ -643,24 +680,33 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
 
   // Data Dictionary view
   const dictionaryRows = dictionaryData?.fields.map(field => {
-    const ai = generateAISpec(field.fieldName, field.dictionaryDefinition, field.dataType);
+    const aiDesc = generateAIDescription(field.fieldName, field.dictionaryDefinition);
+    const aiSpec = generateAISpec(field.fieldName, field.dictionaryDefinition, field.dataType);
     const sensitivityMatch = Math.random() > 0.3; // 70% chance of match
     const generatedSensitivity = sensitivityMatch ? field.sensitivity : (field.sensitivity === "Internal" ? "Confidential" : "Internal");
+    
+    // Calculate composite score: Description (40%), Type (30%), Sensitivity (30%)
+    const typeScore = aiSpec.typeMatch ? 100 : 0;
+    const sensitivityScore = sensitivityMatch ? 100 : 0;
+    const overallScore = Math.round(aiDesc.score * 0.4 + typeScore * 0.3 + sensitivityScore * 0.3);
+    
+    const matchReasons = generateMatchScoreReasons(aiDesc.score, aiSpec.typeMatch, sensitivityMatch);
     
     return {
       fieldName: field.fieldName,
       tableName: field.tableName || "unknown",
       sheetName: field.sheetName,
       originalDescription: field.dictionaryDefinition,
-      generatedDescription: ai.spec,
+      generatedDescription: aiDesc.description,
+      descriptionScore: aiDesc.score,
       originalDataType: field.dataType,
-      generatedDataType: ai.generatedType,
-      typeMatch: ai.typeMatch,
+      generatedDataType: aiSpec.generatedType,
+      typeMatch: aiSpec.typeMatch,
       originalSensitivity: field.sensitivity,
       generatedSensitivity,
       sensitivityMatch,
-      score: ai.score,
-      explanation: ai.explanation
+      overallScore,
+      matchReasons
     };
   }) || [];
 
@@ -712,8 +758,8 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
                   </TooltipProvider>
                 </div>
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Dictionary Specification</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">AI-Generated Specification</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Dictionary Description</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">AI Generated Description</th>
               <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 <div className="flex items-center justify-center gap-1">
                   Match Score
@@ -723,7 +769,22 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
                         <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
-                        <p>Composite score: Definition match (60%), Type match (20%), Sensitivity match (20%).</p>
+                        <p>Composite score: Description match (40%), Type match (30%), Sensitivity match (30%).</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                <div className="flex items-center gap-1">
+                  Match Score Reasons
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p>Actionable recommendations based on validation results.</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -733,10 +794,7 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
           </thead>
           <tbody>
             {dictionaryRows.map((row, index) => {
-              const typeScore = row.typeMatch ? 100 : 0;
-              const sensitivityScore = row.sensitivityMatch ? 100 : 0;
-              const overallScore = Math.round(row.score * 0.6 + typeScore * 0.2 + sensitivityScore * 0.2);
-              const ScoreIcon = getScoreIcon(overallScore);
+              const ScoreIcon = getScoreIcon(row.overallScore);
               
               return (
                 <tr key={index} className="data-table-row">
@@ -786,34 +844,59 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
                     </div>
                   </td>
                   <td className="px-4 py-4 max-w-xs">
-                    <p className="text-sm text-foreground">{row.originalDescription}</p>
+                    <p className="text-sm text-foreground">{row.originalDescription || <span className="text-muted-foreground italic">No description provided</span>}</p>
                   </td>
                   <td className="px-4 py-4 max-w-xs">
                     <p className="text-sm text-foreground">{row.generatedDescription}</p>
-                    <div className="flex items-start gap-1 mt-2">
-                      <Info className="w-3 h-3 text-info mt-0.5 flex-shrink-0" />
-                      <p className="text-xs text-muted-foreground">{row.explanation}</p>
+                    <div className="flex items-center gap-1 mt-2">
+                      <span className={cn("text-xs px-1.5 py-0.5 rounded", getScoreColor(row.descriptionScore))}>
+                        {row.descriptionScore}% match
+                      </span>
                     </div>
                   </td>
                   <td className="px-4 py-4">
                     <div className="flex flex-col items-center gap-2">
                       <div className="flex items-center gap-2">
-                        <ScoreIcon className={cn("w-4 h-4", getScoreColor(overallScore))} />
-                        <span className={cn("text-lg font-bold", getScoreColor(overallScore))}>
-                          {overallScore}%
+                        <ScoreIcon className={cn("w-4 h-4", getScoreColor(row.overallScore))} />
+                        <span className={cn("text-lg font-bold", getScoreColor(row.overallScore))}>
+                          {row.overallScore}%
                         </span>
                       </div>
                       <div className="score-bar w-16">
                         <div 
-                          className={cn("score-fill", getScoreBg(overallScore))}
-                          style={{ width: `${overallScore}%` }}
+                          className={cn("score-fill", getScoreBg(row.overallScore))}
+                          style={{ width: `${row.overallScore}%` }}
                         />
                       </div>
                       <div className="flex gap-1 text-[10px]">
+                        <span className={row.descriptionScore >= 70 ? "text-success" : "text-warning"}>D</span>
+                        <span className="text-muted-foreground">|</span>
                         <span className={row.typeMatch ? "text-success" : "text-destructive"}>T</span>
                         <span className="text-muted-foreground">|</span>
                         <span className={row.sensitivityMatch ? "text-success" : "text-destructive"}>S</span>
                       </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-4 max-w-xs">
+                    <div className="flex flex-col gap-1">
+                      {row.matchReasons.map((reason, idx) => (
+                        <div 
+                          key={idx} 
+                          className={cn(
+                            "text-xs px-2 py-1 rounded flex items-center gap-1",
+                            reason.includes("passed") 
+                              ? "bg-success/10 text-success" 
+                              : "bg-warning/10 text-warning"
+                          )}
+                        >
+                          {reason.includes("passed") ? (
+                            <CheckCircle className="w-3 h-3 flex-shrink-0" />
+                          ) : (
+                            <AlertTriangle className="w-3 h-3 flex-shrink-0" />
+                          )}
+                          <span>{reason}</span>
+                        </div>
+                      ))}
                     </div>
                   </td>
                 </tr>
