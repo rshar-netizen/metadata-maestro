@@ -1,55 +1,51 @@
 import { FileUploadZone } from "./FileUploadZone";
 import { MetadataValidationTabs } from "./MetadataValidationTabs";
-import { Activity, CheckCircle2, AlertTriangle, XCircle, TrendingUp, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Target, BookOpen, Database, Clock, AlertTriangle, TrendingUp } from "lucide-react";
 
 export const DataSourcesTab = () => {
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Health KPIs Section */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      {/* Metadata Accuracy KPIs Section */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <div className="card-glass rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Activity className="w-4 h-4 text-primary" />
-            <span className="text-xs text-muted-foreground">Overall Health</span>
+            <Target className="w-4 h-4 text-primary" />
+            <span className="text-xs text-muted-foreground">Overall Metadata Accuracy</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">85%</p>
+          <p className="text-2xl font-bold text-foreground">76%</p>
           <div className="flex items-center gap-1 mt-1">
             <TrendingUp className="w-3 h-3 text-success" />
-            <span className="text-xs text-success">+2.3%</span>
+            <span className="text-xs text-success">+3.2%</span>
           </div>
         </div>
 
         <div className="card-glass rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle2 className="w-4 h-4 text-success" />
-            <span className="text-xs text-muted-foreground">Validated</span>
+            <BookOpen className="w-4 h-4 text-info" />
+            <span className="text-xs text-muted-foreground">Glossary Accuracy</span>
           </div>
-          <p className="text-2xl font-bold text-success">142</p>
-          <p className="text-xs text-muted-foreground mt-1">fields passing</p>
+          <p className="text-2xl font-bold text-foreground">75%</p>
+          <div className="flex items-center gap-1 mt-1">
+            <TrendingUp className="w-3 h-3 text-success" />
+            <span className="text-xs text-success">+2.4%</span>
+          </div>
         </div>
 
         <div className="card-glass rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
-            <AlertTriangle className="w-4 h-4 text-warning" />
-            <span className="text-xs text-muted-foreground">Needs Review</span>
+            <Database className="w-4 h-4 text-primary" />
+            <span className="text-xs text-muted-foreground">Data Dictionary Accuracy</span>
           </div>
-          <p className="text-2xl font-bold text-warning">23</p>
-          <p className="text-xs text-muted-foreground mt-1">fields pending</p>
+          <p className="text-2xl font-bold text-foreground">78%</p>
+          <div className="flex items-center gap-1 mt-1">
+            <TrendingUp className="w-3 h-3 text-success" />
+            <span className="text-xs text-success">+4.1%</span>
+          </div>
         </div>
 
         <div className="card-glass rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
-            <XCircle className="w-4 h-4 text-destructive" />
-            <span className="text-xs text-muted-foreground">Critical</span>
-          </div>
-          <p className="text-2xl font-bold text-destructive">5</p>
-          <p className="text-xs text-muted-foreground mt-1">fields failing</p>
-        </div>
-
-        <div className="card-glass rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Clock className="w-4 h-4 text-info" />
+            <Clock className="w-4 h-4 text-muted-foreground" />
             <span className="text-xs text-muted-foreground">Last Scan</span>
           </div>
           <p className="text-lg font-bold text-foreground">2h ago</p>
@@ -58,11 +54,11 @@ export const DataSourcesTab = () => {
 
         <div className="card-glass rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Activity className="w-4 h-4 text-primary" />
-            <span className="text-xs text-muted-foreground">Coverage</span>
+            <AlertTriangle className="w-4 h-4 text-warning" />
+            <span className="text-xs text-muted-foreground">Active Alerts</span>
           </div>
-          <p className="text-2xl font-bold text-foreground">94%</p>
-          <p className="text-xs text-muted-foreground mt-1">fields documented</p>
+          <p className="text-2xl font-bold text-warning">4</p>
+          <p className="text-xs text-muted-foreground mt-1">1 critical</p>
         </div>
       </div>
 
