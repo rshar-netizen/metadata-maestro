@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataSourcesTab } from "@/components/dashboard/DataSourcesTab";
 import { DomainKPIsTab } from "@/components/dashboard/DomainKPIsTab";
-import { DataQualityTab } from "@/components/dashboard/DataQualityTab";
 import { 
   Database, 
   BarChart3, 
@@ -72,13 +71,6 @@ const Index = () => {
               <BarChart3 className="w-4 h-4" />
               Domain KPIs
             </TabsTrigger>
-            <TabsTrigger 
-              value="data-quality" 
-              className="gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary rounded-lg px-6 py-3"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              Data Quality Results
-            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="data-sources" className="mt-8">
@@ -87,10 +79,6 @@ const Index = () => {
           
           <TabsContent value="domain-kpis" className="mt-8">
             <DomainKPIsTab />
-          </TabsContent>
-          
-          <TabsContent value="data-quality" className="mt-8">
-            <DataQualityTab />
           </TabsContent>
         </Tabs>
       </main>
