@@ -9,194 +9,320 @@ import {
 
 interface FieldComparison {
   fieldName: string;
+  tableName: string;
   originalDescription: string;
   generatedDescription: string;
   matchScore: number;
   explanation: string;
   dataType: string;
+  sensitivity: string;
 }
 
 // Business Glossary mock data - focuses on business term definitions
 const glossaryMockData: FieldComparison[] = [
   {
-    fieldName: "exposure_id",
-    originalDescription: "Unique identifier for exposure",
-    generatedDescription: "Primary key uniquely identifying each exposure record in the system",
+    fieldName: "property_id",
+    tableName: "property_master",
+    originalDescription: "Unique identifier for the property",
+    generatedDescription: "Primary key uniquely identifying each real estate asset in the portfolio management system",
     matchScore: 94,
     explanation: "High semantic alignment with minor phrasing differences",
-    dataType: "VARCHAR"
+    dataType: "string",
+    sensitivity: "Internal"
   },
   {
-    fieldName: "client_id",
-    originalDescription: "Client identifier",
-    generatedDescription: "Unique identifier linking to the master client record",
+    fieldName: "property_name",
+    tableName: "property_master",
+    originalDescription: "Market-facing property name",
+    generatedDescription: "Public-facing display name used for property marketing and tenant communications",
     matchScore: 88,
-    explanation: "Good alignment, generated adds foreign key context",
-    dataType: "VARCHAR"
+    explanation: "Good alignment, generated adds marketing context",
+    dataType: "string",
+    sensitivity: "Internal"
   },
   {
-    fieldName: "affiliate",
-    originalDescription: "Affiliate indicator",
-    generatedDescription: "Boolean flag indicating if client is an affiliate of parent organization",
-    matchScore: 68,
-    explanation: "Original missing data type and business logic context",
-    dataType: "BOOLEAN"
-  },
-  {
-    fieldName: "relationship_owner",
-    originalDescription: "Owner of relationship",
-    generatedDescription: "Primary relationship manager responsible for client engagement",
-    matchScore: 71,
-    explanation: "Generated adds role specificity and accountability context",
-    dataType: "VARCHAR"
-  },
-  {
-    fieldName: "mandate_status",
-    originalDescription: "Status of mandate",
-    generatedDescription: "Current lifecycle status of mandate (Active/Pending/Terminated/Suspended)",
+    fieldName: "property_type",
+    tableName: "property_master",
+    originalDescription: "Property category",
+    generatedDescription: "Classification of real estate asset type (Multifamily/Office/Industrial/Retail)",
     matchScore: 72,
-    explanation: "Original lacks enumeration of valid status values",
-    dataType: "VARCHAR"
+    explanation: "Original lacks enumeration of valid property types",
+    dataType: "string",
+    sensitivity: "Internal"
   },
   {
-    fieldName: "exposure_category",
-    originalDescription: "Category of exposure",
-    generatedDescription: "Classification of exposure type for risk aggregation purposes",
+    fieldName: "occupancy_rate_pct",
+    tableName: "property_master",
+    originalDescription: "Occupancy %",
+    generatedDescription: "Percentage of leasable space currently occupied by tenants, measured as leased sqft / total sqft",
+    matchScore: 68,
+    explanation: "Original missing calculation methodology context",
+    dataType: "float",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "tenant_legal_name",
+    tableName: "tenant_master",
+    originalDescription: "Legal tenant name",
+    generatedDescription: "Registered legal entity name of the tenant organization for contractual purposes",
+    matchScore: 91,
+    explanation: "High alignment with legal context added",
+    dataType: "string",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "credit_rating_internal",
+    tableName: "tenant_master",
+    originalDescription: "Internal credit rating",
+    generatedDescription: "Proprietary credit assessment score (AAA/AA/A/BBB/BB/B) based on financial analysis",
     matchScore: 65,
-    explanation: "Missing risk management and aggregation context",
-    dataType: "VARCHAR"
+    explanation: "Original lacks rating scale enumeration",
+    dataType: "string",
+    sensitivity: "Confidential"
   },
   {
-    fieldName: "asset_class",
-    originalDescription: "Asset classification",
-    generatedDescription: "Primary asset class categorization (Equity/Fixed Income/Alternatives/Cash)",
+    fieldName: "lease_type",
+    tableName: "lease_master",
+    originalDescription: "Lease structure (e.g., NNN, Gross)",
+    generatedDescription: "Classification of lease expense structure (Triple Net/Modified Gross/Full Service)",
+    matchScore: 85,
+    explanation: "Good alignment with lease terminology",
+    dataType: "string",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "base_rent_annual_usd",
+    tableName: "lease_master",
+    originalDescription: "Annual base rent amount",
+    generatedDescription: "Contractual annual base rent in USD, excluding pass-throughs and escalations",
     matchScore: 78,
-    explanation: "Generated provides enumeration of standard classifications",
-    dataType: "VARCHAR"
+    explanation: "Generated adds exclusion context for financial clarity",
+    dataType: "float",
+    sensitivity: "Confidential"
   },
   {
-    fieldName: "investment_strategy",
-    originalDescription: "Investment approach",
-    generatedDescription: "Defined investment strategy aligned with mandate objectives",
+    fieldName: "deal_stage",
+    tableName: "deal_pipeline",
+    originalDescription: "Current deal stage in workflow",
+    generatedDescription: "Investment committee workflow status (Screening/Due Diligence/IC Review/Approved/Closed)",
+    matchScore: 62,
+    explanation: "Original lacks stage enumeration and IC context",
+    dataType: "string",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "target_irr_pct",
+    tableName: "deal_pipeline",
+    originalDescription: "Target internal rate of return (IRR)",
+    generatedDescription: "Projected annualized return target for investment evaluation, expressed as percentage",
+    matchScore: 89,
+    explanation: "Strong alignment with investment terminology",
+    dataType: "float",
+    sensitivity: "Confidential"
+  },
+  {
+    fieldName: "capex_type",
+    tableName: "capex_project",
+    originalDescription: "Type/category of capex project",
+    generatedDescription: "Capital expenditure classification (HVAC/Roof/Elevator/Lobby/Parking/TI)",
+    matchScore: 71,
+    explanation: "Original missing project type enumeration",
+    dataType: "string",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "appraised_value_usd",
+    tableName: "property_valuation",
+    originalDescription: "Appraised market value",
+    generatedDescription: "Third-party appraised fair market value in USD as of valuation date",
+    matchScore: 92,
+    explanation: "Excellent alignment with valuation terminology",
+    dataType: "float",
+    sensitivity: "Confidential"
+  },
+  {
+    fieldName: "cap_rate_pct",
+    tableName: "property_valuation",
+    originalDescription: "Implied/market capitalization rate (%)",
+    generatedDescription: "Capitalization rate derived from NOI divided by property value, expressed as percentage",
+    matchScore: 86,
+    explanation: "Good alignment, generated adds calculation context",
+    dataType: "float",
+    sensitivity: "Confidential"
+  },
+  {
+    fieldName: "green_certification",
+    tableName: "property_esg_metrics",
+    originalDescription: "Green building certification level",
+    generatedDescription: "Sustainability certification status (LEED Platinum/Gold/Silver/ENERGY STAR/None)",
     matchScore: 74,
-    explanation: "Original uses informal terminology vs formal strategy definition",
-    dataType: "VARCHAR"
+    explanation: "Original lacks certification level enumeration",
+    dataType: "string",
+    sensitivity: "Internal"
   },
   {
-    fieldName: "aum_type",
-    originalDescription: "AUM classification",
-    generatedDescription: "Type classification of Assets Under Management (Regulatory/Discretionary/Advisory)",
-    matchScore: 69,
-    explanation: "Original lacks full form and enumeration",
-    dataType: "VARCHAR"
-  },
-  {
-    fieldName: "probability_weight",
-    originalDescription: "Probability factor",
-    generatedDescription: "Likelihood weighting (0-100%) applied to pipeline AUM projections",
-    matchScore: 64,
-    explanation: "Original missing scale definition and application context",
-    dataType: "DECIMAL"
+    fieldName: "ghg_kgco2e_per_sqft",
+    tableName: "property_esg_metrics",
+    originalDescription: "GHG emissions intensity (kgCO2e per sqft)",
+    generatedDescription: "Greenhouse gas emissions normalized by property area, measured in kilograms CO2 equivalent",
+    matchScore: 95,
+    explanation: "High alignment with ESG measurement standards",
+    dataType: "float",
+    sensitivity: "Internal"
   }
 ];
 
 // Data Dictionary mock data - focuses on technical field definitions
 const dictionaryMockData: FieldComparison[] = [
   {
-    fieldName: "exposure_id",
-    originalDescription: "VARCHAR(36), NOT NULL, PRIMARY KEY",
-    generatedDescription: "UUID primary key, 36-character string format, auto-generated on insert",
+    fieldName: "property_id",
+    tableName: "property_master",
+    originalDescription: "string, PRIMARY KEY, NOT NULL",
+    generatedDescription: "VARCHAR(20) primary key, format PRP######, auto-validated on insert",
     matchScore: 92,
-    explanation: "Technical specs align, generated adds UUID format detail",
-    dataType: "VARCHAR(36)"
+    explanation: "Technical specs align, generated adds format pattern",
+    dataType: "string",
+    sensitivity: "Internal"
   },
   {
-    fieldName: "client_id",
-    originalDescription: "VARCHAR(36), NOT NULL, FK to clients",
-    generatedDescription: "Foreign key reference to clients.id, enforces referential integrity",
-    matchScore: 89,
-    explanation: "Good alignment on FK relationship and constraints",
-    dataType: "VARCHAR(36)"
-  },
-  {
-    fieldName: "client_name",
-    originalDescription: "VARCHAR(255), NOT NULL",
-    generatedDescription: "Variable character field up to 255 chars, required field for client legal name",
-    matchScore: 85,
-    explanation: "Technical specs match, generated adds business context",
-    dataType: "VARCHAR(255)"
-  },
-  {
-    fieldName: "parent_client_id",
-    originalDescription: "VARCHAR(36), NULLABLE, FK to clients",
-    generatedDescription: "Self-referencing foreign key for client hierarchy, nullable for root clients",
-    matchScore: 91,
-    explanation: "Excellent alignment on nullability and self-reference pattern",
-    dataType: "VARCHAR(36)"
-  },
-  {
-    fieldName: "affiliate",
-    originalDescription: "BOOLEAN, DEFAULT FALSE",
-    generatedDescription: "Boolean flag with false default, indicates affiliate relationship status",
-    matchScore: 94,
-    explanation: "Perfect alignment on type and default value",
-    dataType: "BOOLEAN"
-  },
-  {
-    fieldName: "mandate_id",
-    originalDescription: "VARCHAR(36), NOT NULL, FK to mandates",
-    generatedDescription: "Foreign key to mandates table, required for all exposure records",
+    fieldName: "property_name",
+    tableName: "property_master",
+    originalDescription: "string, NOT NULL",
+    generatedDescription: "VARCHAR(255), required field for property display name, indexed for search",
     matchScore: 88,
-    explanation: "Strong alignment on FK constraint and requirement",
-    dataType: "VARCHAR(36)"
+    explanation: "Good alignment, generated adds length and index info",
+    dataType: "string",
+    sensitivity: "Internal"
   },
   {
-    fieldName: "effective_start_date",
-    originalDescription: "DATE, NOT NULL",
-    generatedDescription: "Date field without time component, required, stores mandate effective date",
+    fieldName: "latitude",
+    tableName: "property_master",
+    originalDescription: "float",
+    generatedDescription: "DECIMAL(8,5) for geographic coordinate, range -90 to +90, nullable",
+    matchScore: 85,
+    explanation: "Generated adds precision and valid range constraints",
+    dataType: "float",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "longitude",
+    tableName: "property_master",
+    originalDescription: "float",
+    generatedDescription: "DECIMAL(9,5) for geographic coordinate, range -180 to +180, nullable",
+    matchScore: 85,
+    explanation: "Generated adds precision and valid range constraints",
+    dataType: "float",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "tenant_id",
+    tableName: "tenant_master",
+    originalDescription: "string, PRIMARY KEY",
+    generatedDescription: "VARCHAR(20), format TNT######, unique identifier with referential integrity to lease_master",
+    matchScore: 91,
+    explanation: "Excellent alignment on PK, generated adds FK relationship",
+    dataType: "string",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "lease_id",
+    tableName: "lease_master",
+    originalDescription: "string, PRIMARY KEY",
+    generatedDescription: "VARCHAR(20), format LS#######, composite foreign keys to property_master and tenant_master",
+    matchScore: 94,
+    explanation: "Strong alignment with relationship context added",
+    dataType: "string",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "lease_start_date",
+    tableName: "lease_master",
+    originalDescription: "date",
+    generatedDescription: "DATE, NOT NULL, must be <= lease_end_date, indexed for active lease queries",
     matchScore: 82,
-    explanation: "Type alignment confirmed, generated adds temporal precision note",
-    dataType: "DATE"
+    explanation: "Generated adds validation rule and indexing context",
+    dataType: "date",
+    sensitivity: "Internal"
   },
   {
-    fieldName: "effective_end_date",
-    originalDescription: "DATE, NULLABLE",
-    generatedDescription: "Optional date field for mandate termination, NULL indicates active mandate",
-    matchScore: 86,
-    explanation: "Good alignment, generated clarifies NULL business meaning",
-    dataType: "DATE"
+    fieldName: "lease_end_date",
+    tableName: "lease_master",
+    originalDescription: "date",
+    generatedDescription: "DATE, NOT NULL, must be >= lease_start_date, used for lease expiration reporting",
+    matchScore: 82,
+    explanation: "Generated adds validation rule and business purpose",
+    dataType: "date",
+    sensitivity: "Internal"
   },
   {
-    fieldName: "aum_usd",
-    originalDescription: "DECIMAL(18,2), NOT NULL",
-    generatedDescription: "18-digit decimal with 2 decimal places, stores USD-converted AUM value",
+    fieldName: "is_active",
+    tableName: "lease_master",
+    originalDescription: "boolean",
+    generatedDescription: "BOOLEAN, derived flag (lease_end_date >= CURRENT_DATE), indexed for filtering",
+    matchScore: 78,
+    explanation: "Generated clarifies derived nature and indexing",
+    dataType: "boolean",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "deal_id",
+    tableName: "deal_pipeline",
+    originalDescription: "string, PRIMARY KEY",
+    generatedDescription: "VARCHAR(20), format DL#######, unique deal identifier with FK to property_master",
     matchScore: 93,
-    explanation: "Excellent precision alignment with currency context",
-    dataType: "DECIMAL(18,2)"
+    explanation: "Excellent alignment with relationship context",
+    dataType: "string",
+    sensitivity: "Internal"
   },
   {
-    fieldName: "currency",
-    originalDescription: "CHAR(3), NOT NULL",
-    generatedDescription: "3-character ISO 4217 currency code, fixed-length for standardization",
-    matchScore: 87,
-    explanation: "Type match confirmed, generated adds ISO standard reference",
-    dataType: "CHAR(3)"
+    fieldName: "indicative_price_usd",
+    tableName: "deal_pipeline",
+    originalDescription: "float",
+    generatedDescription: "DECIMAL(15,2), nullable, stores indicative purchase/sale price in USD",
+    matchScore: 86,
+    explanation: "Generated adds precision and nullability context",
+    dataType: "float",
+    sensitivity: "Confidential"
   },
   {
-    fieldName: "source_system",
-    originalDescription: "VARCHAR(50), NOT NULL",
-    generatedDescription: "Source system identifier, max 50 chars, used for data lineage tracking",
+    fieldName: "budget_usd",
+    tableName: "capex_project",
+    originalDescription: "float",
+    generatedDescription: "DECIMAL(12,2), NOT NULL, approved capex budget amount, must be > 0",
     matchScore: 84,
-    explanation: "Good alignment with lineage context added",
-    dataType: "VARCHAR(50)"
+    explanation: "Generated adds precision and validation constraints",
+    dataType: "float",
+    sensitivity: "Confidential"
   },
   {
-    fieldName: "created_at",
-    originalDescription: "TIMESTAMP, NOT NULL, DEFAULT NOW()",
-    generatedDescription: "Auto-populated timestamp on record creation, used for audit trail",
-    matchScore: 96,
-    explanation: "Excellent alignment on auto-population and audit purpose",
-    dataType: "TIMESTAMP"
+    fieldName: "valuation_id",
+    tableName: "property_valuation",
+    originalDescription: "string, PRIMARY KEY",
+    generatedDescription: "VARCHAR(20), format VAL#######, unique per valuation event, FK to property_master",
+    matchScore: 95,
+    explanation: "Excellent alignment with format and FK context",
+    dataType: "string",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "valuation_date",
+    tableName: "property_valuation",
+    originalDescription: "date",
+    generatedDescription: "DATE, NOT NULL, effective date of appraisal, indexed for time-series queries",
+    matchScore: 88,
+    explanation: "Good alignment with temporal indexing context",
+    dataType: "date",
+    sensitivity: "Internal"
+  },
+  {
+    fieldName: "as_of_date",
+    tableName: "property_esg_metrics",
+    originalDescription: "date",
+    generatedDescription: "DATE, part of composite PK with property_id, quarterly snapshot reference date",
+    matchScore: 90,
+    explanation: "Strong alignment with composite key context",
+    dataType: "date",
+    sensitivity: "Internal"
   }
 ];
 
@@ -216,6 +342,17 @@ const getScoreIcon = (score: number) => {
   if (score >= 80) return CheckCircle;
   if (score >= 60) return AlertTriangle;
   return XCircle;
+};
+
+const getSensitivityBadge = (sensitivity: string) => {
+  switch (sensitivity) {
+    case "PII":
+      return "bg-destructive/20 text-destructive";
+    case "Confidential":
+      return "bg-warning/20 text-warning";
+    default:
+      return "bg-muted text-muted-foreground";
+  }
 };
 
 interface MetadataComparisonTableProps {
@@ -255,8 +392,10 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
         <table className="w-full">
           <thead>
             <tr className="bg-muted/30">
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Table</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Field Name</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Type</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Sensitivity</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{originalHeader}</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{generatedHeader}</th>
               <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -282,15 +421,23 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
               return (
                 <tr key={index} className="data-table-row">
                   <td className="px-4 py-4">
-                    <div className="flex items-center gap-2">
-                      <code className="text-sm font-mono text-primary bg-primary/10 px-2 py-1 rounded">
-                        {row.fieldName}
-                      </code>
-                    </div>
+                    <span className="text-xs font-medium text-info bg-info/10 px-2 py-1 rounded">
+                      {row.tableName}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4">
+                    <code className="text-sm font-mono text-primary bg-primary/10 px-2 py-1 rounded">
+                      {row.fieldName}
+                    </code>
                   </td>
                   <td className="px-4 py-4">
                     <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded">
                       {row.dataType}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4">
+                    <span className={cn("text-xs font-medium px-2 py-1 rounded", getSensitivityBadge(row.sensitivity))}>
+                      {row.sensitivity}
                     </span>
                   </td>
                   <td className="px-4 py-4 max-w-xs">
