@@ -16,7 +16,8 @@ interface FieldComparison {
   dataType: string;
 }
 
-const mockData: FieldComparison[] = [
+// Business Glossary mock data - focuses on business term definitions
+const glossaryMockData: FieldComparison[] = [
   {
     fieldName: "exposure_id",
     originalDescription: "Unique identifier for exposure",
@@ -34,22 +35,6 @@ const mockData: FieldComparison[] = [
     dataType: "VARCHAR"
   },
   {
-    fieldName: "client_name",
-    originalDescription: "Name of client",
-    generatedDescription: "Legal or registered name of the client entity",
-    matchScore: 82,
-    explanation: "Generated specifies legal naming context",
-    dataType: "VARCHAR"
-  },
-  {
-    fieldName: "parent_client_id",
-    originalDescription: "Parent client reference",
-    generatedDescription: "Foreign key referencing the parent client in hierarchical structure",
-    matchScore: 75,
-    explanation: "Original lacks hierarchical relationship context",
-    dataType: "VARCHAR"
-  },
-  {
     fieldName: "affiliate",
     originalDescription: "Affiliate indicator",
     generatedDescription: "Boolean flag indicating if client is an affiliate of parent organization",
@@ -63,14 +48,6 @@ const mockData: FieldComparison[] = [
     generatedDescription: "Primary relationship manager responsible for client engagement",
     matchScore: 71,
     explanation: "Generated adds role specificity and accountability context",
-    dataType: "VARCHAR"
-  },
-  {
-    fieldName: "mandate_id",
-    originalDescription: "Mandate identifier",
-    generatedDescription: "Unique identifier for investment mandate agreement",
-    matchScore: 85,
-    explanation: "Good alignment with investment context added",
     dataType: "VARCHAR"
   },
   {
@@ -106,38 +83,6 @@ const mockData: FieldComparison[] = [
     dataType: "VARCHAR"
   },
   {
-    fieldName: "mandate_type",
-    originalDescription: "Type of mandate",
-    generatedDescription: "Classification of mandate structure (Discretionary/Advisory/Sub-Advisory)",
-    matchScore: 70,
-    explanation: "Original lacks enumeration and structural context",
-    dataType: "VARCHAR"
-  },
-  {
-    fieldName: "effective_start_date",
-    originalDescription: "Start date",
-    generatedDescription: "Date when mandate agreement becomes legally effective",
-    matchScore: 62,
-    explanation: "Original too generic, lacks legal/contractual context",
-    dataType: "DATE"
-  },
-  {
-    fieldName: "effective_end_date",
-    originalDescription: "End date",
-    generatedDescription: "Date when mandate agreement terminates or expires",
-    matchScore: 60,
-    explanation: "Original too generic, lacks termination context",
-    dataType: "DATE"
-  },
-  {
-    fieldName: "as_of_date",
-    originalDescription: "Reporting date",
-    generatedDescription: "Reference date for which exposure and AUM values are calculated",
-    matchScore: 76,
-    explanation: "Generated adds calculation reference context",
-    dataType: "DATE"
-  },
-  {
     fieldName: "aum_type",
     originalDescription: "AUM classification",
     generatedDescription: "Type classification of Assets Under Management (Regulatory/Discretionary/Advisory)",
@@ -146,68 +91,112 @@ const mockData: FieldComparison[] = [
     dataType: "VARCHAR"
   },
   {
-    fieldName: "aum_usd",
-    originalDescription: "AUM in USD",
-    generatedDescription: "Total Assets Under Management converted to US Dollars",
-    matchScore: 91,
-    explanation: "High alignment with currency conversion context",
-    dataType: "DECIMAL"
-  },
-  {
-    fieldName: "currency",
-    originalDescription: "Currency code",
-    generatedDescription: "ISO 4217 currency code for original denomination",
-    matchScore: 83,
-    explanation: "Generated adds ISO standard reference",
-    dataType: "VARCHAR"
-  },
-  {
-    fieldName: "expected_close_date",
-    originalDescription: "Expected close",
-    generatedDescription: "Projected date for mandate finalization or funding",
-    matchScore: 58,
-    explanation: "Original lacks business process context",
-    dataType: "DATE"
-  },
-  {
     fieldName: "probability_weight",
     originalDescription: "Probability factor",
     generatedDescription: "Likelihood weighting (0-100%) applied to pipeline AUM projections",
     matchScore: 64,
     explanation: "Original missing scale definition and application context",
     dataType: "DECIMAL"
+  }
+];
+
+// Data Dictionary mock data - focuses on technical field definitions
+const dictionaryMockData: FieldComparison[] = [
+  {
+    fieldName: "exposure_id",
+    originalDescription: "VARCHAR(36), NOT NULL, PRIMARY KEY",
+    generatedDescription: "UUID primary key, 36-character string format, auto-generated on insert",
+    matchScore: 92,
+    explanation: "Technical specs align, generated adds UUID format detail",
+    dataType: "VARCHAR(36)"
+  },
+  {
+    fieldName: "client_id",
+    originalDescription: "VARCHAR(36), NOT NULL, FK to clients",
+    generatedDescription: "Foreign key reference to clients.id, enforces referential integrity",
+    matchScore: 89,
+    explanation: "Good alignment on FK relationship and constraints",
+    dataType: "VARCHAR(36)"
+  },
+  {
+    fieldName: "client_name",
+    originalDescription: "VARCHAR(255), NOT NULL",
+    generatedDescription: "Variable character field up to 255 chars, required field for client legal name",
+    matchScore: 85,
+    explanation: "Technical specs match, generated adds business context",
+    dataType: "VARCHAR(255)"
+  },
+  {
+    fieldName: "parent_client_id",
+    originalDescription: "VARCHAR(36), NULLABLE, FK to clients",
+    generatedDescription: "Self-referencing foreign key for client hierarchy, nullable for root clients",
+    matchScore: 91,
+    explanation: "Excellent alignment on nullability and self-reference pattern",
+    dataType: "VARCHAR(36)"
+  },
+  {
+    fieldName: "affiliate",
+    originalDescription: "BOOLEAN, DEFAULT FALSE",
+    generatedDescription: "Boolean flag with false default, indicates affiliate relationship status",
+    matchScore: 94,
+    explanation: "Perfect alignment on type and default value",
+    dataType: "BOOLEAN"
+  },
+  {
+    fieldName: "mandate_id",
+    originalDescription: "VARCHAR(36), NOT NULL, FK to mandates",
+    generatedDescription: "Foreign key to mandates table, required for all exposure records",
+    matchScore: 88,
+    explanation: "Strong alignment on FK constraint and requirement",
+    dataType: "VARCHAR(36)"
+  },
+  {
+    fieldName: "effective_start_date",
+    originalDescription: "DATE, NOT NULL",
+    generatedDescription: "Date field without time component, required, stores mandate effective date",
+    matchScore: 82,
+    explanation: "Type alignment confirmed, generated adds temporal precision note",
+    dataType: "DATE"
+  },
+  {
+    fieldName: "effective_end_date",
+    originalDescription: "DATE, NULLABLE",
+    generatedDescription: "Optional date field for mandate termination, NULL indicates active mandate",
+    matchScore: 86,
+    explanation: "Good alignment, generated clarifies NULL business meaning",
+    dataType: "DATE"
+  },
+  {
+    fieldName: "aum_usd",
+    originalDescription: "DECIMAL(18,2), NOT NULL",
+    generatedDescription: "18-digit decimal with 2 decimal places, stores USD-converted AUM value",
+    matchScore: 93,
+    explanation: "Excellent precision alignment with currency context",
+    dataType: "DECIMAL(18,2)"
+  },
+  {
+    fieldName: "currency",
+    originalDescription: "CHAR(3), NOT NULL",
+    generatedDescription: "3-character ISO 4217 currency code, fixed-length for standardization",
+    matchScore: 87,
+    explanation: "Type match confirmed, generated adds ISO standard reference",
+    dataType: "CHAR(3)"
   },
   {
     fieldName: "source_system",
-    originalDescription: "Source system name",
-    generatedDescription: "Originating system identifier for data lineage tracking",
-    matchScore: 79,
-    explanation: "Generated adds data lineage context",
-    dataType: "VARCHAR"
+    originalDescription: "VARCHAR(50), NOT NULL",
+    generatedDescription: "Source system identifier, max 50 chars, used for data lineage tracking",
+    matchScore: 84,
+    explanation: "Good alignment with lineage context added",
+    dataType: "VARCHAR(50)"
   },
   {
-    fieldName: "source_record_id",
-    originalDescription: "Source record ID",
-    generatedDescription: "Original record identifier from source system for audit trail",
-    matchScore: 86,
-    explanation: "Good alignment with audit context added",
-    dataType: "VARCHAR"
-  },
-  {
-    fieldName: "source_confidence",
-    originalDescription: "Data confidence level",
-    generatedDescription: "Quality confidence score (High/Medium/Low) from source system validation",
-    matchScore: 67,
-    explanation: "Original lacks enumeration and validation context",
-    dataType: "VARCHAR"
-  },
-  {
-    fieldName: "notes",
-    originalDescription: "Additional notes",
-    generatedDescription: "Free-text field for supplementary information and exceptions",
-    matchScore: 80,
-    explanation: "Good alignment with purpose clarification",
-    dataType: "TEXT"
+    fieldName: "created_at",
+    originalDescription: "TIMESTAMP, NOT NULL, DEFAULT NOW()",
+    generatedDescription: "Auto-populated timestamp on record creation, used for audit trail",
+    matchScore: 96,
+    explanation: "Excellent alignment on auto-population and audit purpose",
+    dataType: "TIMESTAMP"
   }
 ];
 
@@ -229,14 +218,37 @@ const getScoreIcon = (score: number) => {
   return XCircle;
 };
 
-export const MetadataComparisonTable = () => {
+interface MetadataComparisonTableProps {
+  type: "glossary" | "dictionary";
+}
+
+export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) => {
+  const data = type === "glossary" ? glossaryMockData : dictionaryMockData;
+  
+  const config = {
+    glossary: {
+      title: "Glossary Definition Analysis",
+      subtitle: "Comparing business glossary terms with AI-generated semantic definitions",
+      originalHeader: "Glossary Definition",
+      generatedHeader: "AI-Generated Definition",
+      matchTooltip: "Semantic similarity between your business glossary definition and the AI-generated business meaning. Higher scores indicate better terminology alignment."
+    },
+    dictionary: {
+      title: "Data Dictionary Analysis",
+      subtitle: "Comparing technical field specifications with AI-generated schema analysis",
+      originalHeader: "Dictionary Specification",
+      generatedHeader: "AI-Generated Specification",
+      matchTooltip: "Technical accuracy between your data dictionary specification and the AI-generated schema analysis. Higher scores indicate better documentation coverage."
+    }
+  };
+
+  const { title, subtitle, originalHeader, generatedHeader, matchTooltip } = config[type];
+
   return (
     <div className="card-glass rounded-xl overflow-hidden">
       <div className="p-6 border-b border-border/30">
-        <h3 className="text-lg font-semibold text-foreground">Metadata Comparison Analysis</h3>
-        <p className="text-sm text-muted-foreground mt-1">
-          Comparing original descriptions with AI-generated definitions
-        </p>
+        <h3 className="text-lg font-semibold text-foreground">{title}</h3>
+        <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
       </div>
       
       <div className="overflow-x-auto">
@@ -245,8 +257,8 @@ export const MetadataComparisonTable = () => {
             <tr className="bg-muted/30">
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Field Name</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Type</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Original Description</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Generated Description</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{originalHeader}</th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">{generatedHeader}</th>
               <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 <div className="flex items-center justify-center gap-1">
                   Match Score
@@ -256,7 +268,7 @@ export const MetadataComparisonTable = () => {
                         <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
-                        <p>Semantic similarity between your original field description and the AI-generated definition. Higher scores indicate better alignment.</p>
+                        <p>{matchTooltip}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -265,7 +277,7 @@ export const MetadataComparisonTable = () => {
             </tr>
           </thead>
           <tbody>
-            {mockData.map((row, index) => {
+            {data.map((row, index) => {
               const ScoreIcon = getScoreIcon(row.matchScore);
               return (
                 <tr key={index} className="data-table-row">
