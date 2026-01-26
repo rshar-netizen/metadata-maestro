@@ -1,60 +1,68 @@
 import { FileUploadZone } from "./FileUploadZone";
 import { MetadataValidationTabs } from "./MetadataValidationTabs";
-import { Database, Table, Layers, FolderTree } from "lucide-react";
+import { Activity, CheckCircle2, AlertTriangle, XCircle, TrendingUp, Clock } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const DataSourcesTab = () => {
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Data Assets Summary */}
-      <div className="card-glass rounded-xl p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-lg font-semibold text-foreground">Data Assets</h2>
-            <p className="text-sm text-muted-foreground">Inventory of discovered assets across all connected sources</p>
+      {/* Health KPIs Section */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="card-glass rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Activity className="w-4 h-4 text-primary" />
+            <span className="text-xs text-muted-foreground">Overall Health</span>
           </div>
-          <span className="text-xs text-muted-foreground bg-muted/30 px-2 py-1 rounded">Last synced: 2 hours ago</span>
+          <p className="text-2xl font-bold text-foreground">85%</p>
+          <div className="flex items-center gap-1 mt-1">
+            <TrendingUp className="w-3 h-3 text-success" />
+            <span className="text-xs text-success">+2.3%</span>
+          </div>
         </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/20 border border-border/30">
-            <div className="p-2 rounded-lg bg-primary/20">
-              <Database className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">8</p>
-              <p className="text-xs text-muted-foreground">Databases</p>
-            </div>
+
+        <div className="card-glass rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <CheckCircle2 className="w-4 h-4 text-success" />
+            <span className="text-xs text-muted-foreground">Validated</span>
           </div>
-          
-          <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/20 border border-border/30">
-            <div className="p-2 rounded-lg bg-info/20">
-              <Layers className="w-5 h-5 text-info" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">24</p>
-              <p className="text-xs text-muted-foreground">Schemas</p>
-            </div>
+          <p className="text-2xl font-bold text-success">142</p>
+          <p className="text-xs text-muted-foreground mt-1">fields passing</p>
+        </div>
+
+        <div className="card-glass rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <AlertTriangle className="w-4 h-4 text-warning" />
+            <span className="text-xs text-muted-foreground">Needs Review</span>
           </div>
-          
-          <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/20 border border-border/30">
-            <div className="p-2 rounded-lg bg-success/20">
-              <Table className="w-5 h-5 text-success" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">156</p>
-              <p className="text-xs text-muted-foreground">Tables</p>
-            </div>
+          <p className="text-2xl font-bold text-warning">23</p>
+          <p className="text-xs text-muted-foreground mt-1">fields pending</p>
+        </div>
+
+        <div className="card-glass rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <XCircle className="w-4 h-4 text-destructive" />
+            <span className="text-xs text-muted-foreground">Critical</span>
           </div>
-          
-          <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/20 border border-border/30">
-            <div className="p-2 rounded-lg bg-warning/20">
-              <FolderTree className="w-5 h-5 text-warning" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">3,892</p>
-              <p className="text-xs text-muted-foreground">Columns</p>
-            </div>
+          <p className="text-2xl font-bold text-destructive">5</p>
+          <p className="text-xs text-muted-foreground mt-1">fields failing</p>
+        </div>
+
+        <div className="card-glass rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Clock className="w-4 h-4 text-info" />
+            <span className="text-xs text-muted-foreground">Last Scan</span>
           </div>
+          <p className="text-lg font-bold text-foreground">2h ago</p>
+          <p className="text-xs text-muted-foreground mt-1">auto-scheduled</p>
+        </div>
+
+        <div className="card-glass rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Activity className="w-4 h-4 text-primary" />
+            <span className="text-xs text-muted-foreground">Coverage</span>
+          </div>
+          <p className="text-2xl font-bold text-foreground">94%</p>
+          <p className="text-xs text-muted-foreground mt-1">fields documented</p>
         </div>
       </div>
 
