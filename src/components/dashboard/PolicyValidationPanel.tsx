@@ -42,6 +42,16 @@ const DEFAULT_SUBDOMAINS_BY_DOMAIN: Record<string, string[]> = {
   "Sales & CRM": ["Accounts", "Contacts", "Activities", "Opportunities"],
 };
 
+const DEFAULT_TABLES_BY_DOMAIN: Record<string, string[]> = {
+  "Real Estate": ["property_master", "property_portfolio_map", "lease_master", "tenant_master", "deal_pipeline", "capex_project", "property_valuation", "property_esg_metrics"],
+  "Fixed Income": ["bond_master", "issuer_master", "fi_portfolio", "duration_metrics", "fi_trade"],
+  "Jennison": ["research_model", "analyst_note", "coverage_universe", "equity_portfolio", "alpha_signal", "equity_trade"],
+  "PGIM Quant": ["factor_model", "quant_signal", "model_portfolio", "backtest_run", "feature_store"],
+  "Private Credit": ["borrower_master", "sponsor_master", "loan_master", "covenant_definition", "capital_call", "pc_deal_pipeline", "rating_history"],
+  "Client & Investor": ["client_master", "client_hierarchy", "client_relationship", "investor_profile", "investor_type", "mandate_master", "mandate_status", "client_exposure", "target_allocation", "capital_commitment"],
+  "Sales & CRM": ["crm_account", "crm_contact", "meeting", "opportunity"],
+};
+
 const getSeverityColor = (severity: PolicyRule["severity"]) => {
   switch (severity) {
     case "critical":
@@ -80,6 +90,14 @@ export const PolicyValidationPanel = ({ policyData }: PolicyValidationPanelProps
       (sd) => sd.trim().toLowerCase() !== domain.name.trim().toLowerCase()
     );
     return cleaned;
+  };
+
+  const getDisplayTables = (domain: DomainHierarchy) => {
+    // Always use predefined tables for known domains
+    if (DEFAULT_TABLES_BY_DOMAIN[domain.name]) {
+      return DEFAULT_TABLES_BY_DOMAIN[domain.name];
+    }
+    return domain.tables || [];
   };
 
   if (!policyData) {
@@ -214,6 +232,7 @@ export const PolicyValidationPanel = ({ policyData }: PolicyValidationPanelProps
             {policyData.domainHierarchy.map((domain) => {
               const isExpanded = expandedDomains.includes(domain.name);
               const displaySubDomains = getDisplaySubDomains(domain);
+              const displayTables = getDisplayTables(domain);
               return (
                 <div key={domain.name} className="border border-border/30 rounded-lg overflow-hidden">
                   <button
@@ -228,7 +247,7 @@ export const PolicyValidationPanel = ({ policyData }: PolicyValidationPanelProps
                       )}
                       <span className="font-medium text-foreground">{domain.name}</span>
                       <Badge variant="secondary" className="text-xs">
-                        {domain.tables.length} tables
+                        {displayTables.length} tables
                       </Badge>
                     </div>
                   </button>
@@ -247,11 +266,11 @@ export const PolicyValidationPanel = ({ policyData }: PolicyValidationPanelProps
                           </div>
                         </div>
                       )}
-                      {domain.tables.length > 0 && (
+                      {displayTables.length > 0 && (
                         <div>
                           <p className="text-xs text-muted-foreground mb-2">Tables referenced:</p>
                           <div className="flex flex-wrap gap-2">
-                            {domain.tables.map((table, idx) => (
+                            {displayTables.map((table, idx) => (
                               <code key={idx} className="text-xs text-primary bg-primary/10 px-1.5 py-0.5 rounded">
                                 {table}
                               </code>
