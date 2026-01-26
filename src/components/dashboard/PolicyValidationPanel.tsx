@@ -69,12 +69,17 @@ export const PolicyValidationPanel = ({ policyData }: PolicyValidationPanelProps
   const [expandedDomains, setExpandedDomains] = useState<string[]>([]);
 
   const getDisplaySubDomains = (domain: DomainHierarchy) => {
+    // Always use predefined sub-domains for known domains
+    // This ensures consistent, correct sub-domain display
+    if (DEFAULT_SUBDOMAINS_BY_DOMAIN[domain.name]) {
+      return DEFAULT_SUBDOMAINS_BY_DOMAIN[domain.name];
+    }
+    
+    // For unknown domains, filter out any sub-domain that matches the domain name
     const cleaned = (domain.subDomains || []).filter(
       (sd) => sd.trim().toLowerCase() !== domain.name.trim().toLowerCase()
     );
-
-    if (cleaned.length > 0) return cleaned;
-    return DEFAULT_SUBDOMAINS_BY_DOMAIN[domain.name] || [];
+    return cleaned;
   };
 
   if (!policyData) {
