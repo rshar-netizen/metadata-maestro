@@ -1,34 +1,62 @@
 import { FileUploadZone } from "./FileUploadZone";
 import { MetadataComparisonTable } from "./MetadataComparisonTable";
-import { KPICard } from "./KPICard";
-import { FileText, Database, Shield, CheckCircle, AlertTriangle, Clock } from "lucide-react";
+import { Database, Table, Layers, FolderTree, CheckCircle, AlertTriangle, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const DataSourcesTab = () => {
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <KPICard
-          title="Glossary Terms"
-          value="1,247"
-          subtitle="Across 12 domains"
-          icon={FileText}
-          trend={{ value: 5.2, isPositive: true }}
-        />
-        <KPICard
-          title="Dictionary Fields"
-          value="3,892"
-          subtitle="156 tables mapped"
-          icon={Database}
-          trend={{ value: 12, isPositive: true }}
-        />
-        <KPICard
-          title="Policy Documents"
-          value="28"
-          subtitle="Last updated 2 days ago"
-          icon={Shield}
-        />
+      {/* Data Assets Summary */}
+      <div className="card-glass rounded-xl p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-lg font-semibold text-foreground">Data Assets</h2>
+            <p className="text-sm text-muted-foreground">Inventory of discovered assets across all connected sources</p>
+          </div>
+          <span className="text-xs text-muted-foreground bg-muted/30 px-2 py-1 rounded">Last synced: 2 hours ago</span>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/20 border border-border/30">
+            <div className="p-2 rounded-lg bg-primary/20">
+              <Database className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-foreground">8</p>
+              <p className="text-xs text-muted-foreground">Databases</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/20 border border-border/30">
+            <div className="p-2 rounded-lg bg-info/20">
+              <Layers className="w-5 h-5 text-info" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-foreground">24</p>
+              <p className="text-xs text-muted-foreground">Schemas</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/20 border border-border/30">
+            <div className="p-2 rounded-lg bg-success/20">
+              <Table className="w-5 h-5 text-success" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-foreground">156</p>
+              <p className="text-xs text-muted-foreground">Tables</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/20 border border-border/30">
+            <div className="p-2 rounded-lg bg-warning/20">
+              <FolderTree className="w-5 h-5 text-warning" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-foreground">3,892</p>
+              <p className="text-xs text-muted-foreground">Columns</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Upload Section */}
