@@ -127,7 +127,7 @@ export const DataSourcesTab = () => {
             }}
           />
           <FileUploadZone
-            title="Policy Documents"
+            title="Policy and Other Documents"
             description="Upload compliance and governance policy documents"
             acceptedFormats="PDF, DOCX, TXT"
             accept=".pdf,.docx,.txt"
