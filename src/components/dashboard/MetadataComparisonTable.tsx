@@ -1,5 +1,11 @@
 import { CheckCircle, AlertTriangle, XCircle, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface FieldComparison {
   fieldName: string;
@@ -316,10 +322,66 @@ export const MetadataComparisonTable = () => {
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Type</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Original Description</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Generated Description</th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">Match Score</th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">Completeness</th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">Consistency</th>
-              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">Uniqueness</th>
+              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                <div className="flex items-center justify-center gap-1">
+                  Match Score
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p>Semantic similarity between your original field description and the AI-generated definition. Higher scores indicate better alignment.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </th>
+              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                <div className="flex items-center justify-center gap-1">
+                  Completeness
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p>Percentage of records that have a non-null value. 100% means every row has data for this field.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </th>
+              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                <div className="flex items-center justify-center gap-1">
+                  Consistency
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p>Percentage of values following expected patterns and formats. High scores indicate uniform data quality.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </th>
+              <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                <div className="flex items-center justify-center gap-1">
+                  Uniqueness
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p>Percentage of distinct values vs total records. Expected to be high for IDs and low for categorical fields.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
