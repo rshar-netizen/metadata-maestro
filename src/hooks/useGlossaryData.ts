@@ -47,24 +47,55 @@ export const useGlossaryData = () => {
           const allFields: GlossaryField[] = [];
           const sheetsProcessed: string[] = [];
           
+          console.log("Parsing glossary file:", file.name);
+          console.log("Sheets found:", workbook.SheetNames);
+          
           // Process ALL sheets in the workbook
           workbook.SheetNames.forEach(sheetName => {
             const worksheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(worksheet);
             
+            console.log(`Sheet "${sheetName}" has ${jsonData.length} rows`);
+            if (jsonData.length > 0) {
+              console.log("Sample row keys:", Object.keys(jsonData[0] as object));
+              console.log("Sample row:", jsonData[0]);
+            }
+            
             if (jsonData.length > 0) {
               sheetsProcessed.push(sheetName);
               
-              const fields: GlossaryField[] = jsonData.map((row: any) => ({
-                fieldName: row.field_name || row.fieldName || row.Field || row.field || row["Field Name"] || row["Column Name"] || "",
-                tableName: row.table_name || row.tableName || row.Table || row.table || row["Table Name"] || sheetName,
-                glossaryDefinition: row.definition || row.Definition || row.description || row.Description || row["Business Definition"] || "",
-              })).filter(f => f.fieldName && f.glossaryDefinition);
+              const fields: GlossaryField[] = jsonData.map((row: any) => {
+                // Get all keys from the row to find the best matches
+                const keys = Object.keys(row);
+                
+                // Find field name column (flexible matching)
+                const fieldNameKey = keys.find(k => 
+                  /field|column|name|attribute|term/i.test(k) && !/table|schema|type|def/i.test(k)
+                ) || keys[0];
+                
+                // Find table name column
+                const tableNameKey = keys.find(k => 
+                  /table|entity|schema|domain/i.test(k)
+                );
+                
+                // Find definition column
+                const definitionKey = keys.find(k => 
+                  /def|desc|meaning|comment|note|business/i.test(k)
+                );
+                
+                return {
+                  fieldName: fieldNameKey ? String(row[fieldNameKey] || "") : "",
+                  tableName: tableNameKey ? String(row[tableNameKey] || sheetName) : sheetName,
+                  glossaryDefinition: definitionKey ? String(row[definitionKey] || "") : String(row[keys[1]] || ""),
+                };
+              }).filter(f => f.fieldName && f.fieldName.trim() !== "");
               
+              console.log(`Parsed ${fields.length} valid fields from sheet "${sheetName}"`);
               allFields.push(...fields);
             }
           });
 
+          console.log(`Total fields parsed: ${allFields.length}`);
           resolve({
             fields: allFields,
             fileName: file.name,
@@ -72,6 +103,7 @@ export const useGlossaryData = () => {
             sheetsProcessed
           });
         } catch (error) {
+          console.error("Error parsing glossary file:", error);
           reject(error);
         }
       };
@@ -93,27 +125,68 @@ export const useGlossaryData = () => {
           const allFields: DictionaryField[] = [];
           const sheetsProcessed: string[] = [];
           
+          console.log("Parsing dictionary file:", file.name);
+          console.log("Sheets found:", workbook.SheetNames);
+          
           // Process ALL sheets in the workbook
           workbook.SheetNames.forEach(sheetName => {
             const worksheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(worksheet);
             
+            console.log(`Sheet "${sheetName}" has ${jsonData.length} rows`);
+            if (jsonData.length > 0) {
+              console.log("Sample row keys:", Object.keys(jsonData[0] as object));
+              console.log("Sample row:", jsonData[0]);
+            }
+            
             if (jsonData.length > 0) {
               sheetsProcessed.push(sheetName);
               
-              const fields: DictionaryField[] = jsonData.map((row: any) => ({
-                fieldName: row.field_name || row.fieldName || row.Field || row.field || row["Field Name"] || row["Column Name"] || row["column_name"] || "",
-                tableName: row.table_name || row.tableName || row.Table || row.table || row["Table Name"] || sheetName,
-                dictionaryDefinition: row.definition || row.Definition || row.description || row.Description || row["Technical Definition"] || row.Specification || "",
-                dataType: row.data_type || row.dataType || row.Type || row.type || row["Data Type"] || row["DataType"] || "",
-                sensitivity: row.sensitivity || row.Sensitivity || row.classification || row.Classification || row["Data Classification"] || "Internal",
-                sheetName: sheetName
-              })).filter(f => f.fieldName);
+              const fields: DictionaryField[] = jsonData.map((row: any) => {
+                // Get all keys from the row to find the best matches
+                const keys = Object.keys(row);
+                
+                // Find field name column (flexible matching)
+                const fieldNameKey = keys.find(k => 
+                  /field|column|name|attribute/i.test(k) && !/table|schema|type|def/i.test(k)
+                ) || keys[0];
+                
+                // Find table name column
+                const tableNameKey = keys.find(k => 
+                  /table|entity|schema/i.test(k)
+                );
+                
+                // Find definition column
+                const definitionKey = keys.find(k => 
+                  /def|desc|spec|comment|note|meaning/i.test(k)
+                );
+                
+                // Find data type column
+                const dataTypeKey = keys.find(k => 
+                  /type|dtype|datatype|format/i.test(k) && !/table/i.test(k)
+                );
+                
+                // Find sensitivity column
+                const sensitivityKey = keys.find(k => 
+                  /sensit|class|confid|security|pii/i.test(k)
+                );
+                
+                return {
+                  fieldName: fieldNameKey ? String(row[fieldNameKey] || "") : "",
+                  tableName: tableNameKey ? String(row[tableNameKey] || sheetName) : sheetName,
+                  dictionaryDefinition: definitionKey ? String(row[definitionKey] || "") : "",
+                  dataType: dataTypeKey ? String(row[dataTypeKey] || "") : "",
+                  sensitivity: sensitivityKey ? String(row[sensitivityKey] || "Internal") : "Internal",
+                  sheetName: sheetName
+                };
+              }).filter(f => f.fieldName && f.fieldName.trim() !== "");
               
+              console.log(`Parsed ${fields.length} valid fields from sheet "${sheetName}"`);
               allFields.push(...fields);
             }
           });
 
+          console.log(`Total fields parsed: ${allFields.length}`);
           resolve({
             fields: allFields,
             fileName: file.name,
@@ -121,6 +194,7 @@ export const useGlossaryData = () => {
             sheetsProcessed
           });
         } catch (error) {
+          console.error("Error parsing dictionary file:", error);
           reject(error);
         }
       };
