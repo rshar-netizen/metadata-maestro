@@ -19,43 +19,43 @@ export const DomainKPIsTab = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           <KPICard
             title="Overall Score"
-            value="78%"
+            value="76%"
             subtitle="Across all domains"
             icon={BarChart3}
             variant="warning"
-            trend={{ value: 4.2, isPositive: true }}
+            trend={{ value: 3.8, isPositive: true }}
           />
           <KPICard
             title="Glossary Coverage"
-            value="82%"
-            subtitle="1,247 / 1,521 terms"
+            value="75%"
+            subtitle="Across 7 domains"
             icon={Target}
-            trend={{ value: 2.1, isPositive: true }}
+            trend={{ value: 2.4, isPositive: true }}
           />
           <KPICard
             title="Dictionary Coverage"
-            value="74%"
-            subtitle="3,892 / 5,260 fields"
+            value="78%"
+            subtitle="44 tables mapped"
             icon={Database}
-            trend={{ value: 5.3, isPositive: true }}
+            trend={{ value: 4.1, isPositive: true }}
           />
           <KPICard
             title="Active Domains"
-            value="12"
-            subtitle="4 need attention"
+            value="7"
+            subtitle="3 need attention"
             icon={Layers}
           />
           <KPICard
             title="Improvement Rate"
-            value="+3.2%"
+            value="+2.8%"
             subtitle="vs last week"
             icon={TrendingUp}
             variant="success"
           />
           <KPICard
             title="Active Alerts"
-            value="7"
-            subtitle="2 critical"
+            value="5"
+            subtitle="1 critical"
             icon={AlertTriangle}
             variant="danger"
           />
