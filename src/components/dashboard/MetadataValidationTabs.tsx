@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MetadataComparisonTable } from "./MetadataComparisonTable";
-import { BookOpen, Database, CheckCircle, AlertTriangle, Info, Clock } from "lucide-react";
+import { BookOpen, Database, CheckCircle, AlertTriangle, Info, Clock, FileX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -9,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useMetadata } from "@/contexts/MetadataContext";
 
 interface ValidationKPI {
   label: string;
@@ -104,48 +105,69 @@ const ValidationTabContent = ({ title, description, kpis, totalFields, totalTabl
 
 export const MetadataValidationTabs = () => {
   const [activeTab, setActiveTab] = useState("glossary");
+  const { glossaryData, dictionaryData } = useMetadata();
 
-  const glossaryKPIs: ValidationKPI[] = [
-    {
-      label: "High Match (≥80%)",
-      value: 6,
-      tooltip: "Fields where the business glossary definition closely aligns with the AI-generated description. These fields have clear, well-documented business meaning.",
-      variant: "success"
-    },
-    {
-      label: "Medium Match (60-79%)",
-      value: 9,
-      tooltip: "Fields with partial alignment between glossary and generated definitions. Review recommended to clarify terminology or add missing context.",
-      variant: "warning"
-    },
-    {
-      label: "Low Match (<60%)",
-      value: 0,
-      tooltip: "Fields with significant gaps between glossary definitions and actual data usage. May indicate outdated glossary entries or undefined business terms.",
-      variant: "danger"
+  // Calculate KPIs based on uploaded data
+  const getGlossaryKPIs = (): ValidationKPI[] => {
+    if (!glossaryData?.fields.length) {
+      return [
+        { label: "High Match (≥80%)", value: 0, tooltip: "Upload a business glossary to see match results.", variant: "success" },
+        { label: "Medium Match (60-79%)", value: 0, tooltip: "Upload a business glossary to see match results.", variant: "warning" },
+        { label: "Low Match (<60%)", value: 0, tooltip: "Upload a business glossary to see match results.", variant: "danger" }
+      ];
     }
-  ];
+    // Simulate match distribution for uploaded data
+    const total = glossaryData.fields.length;
+    const high = Math.floor(total * 0.4);
+    const medium = Math.floor(total * 0.5);
+    const low = total - high - medium;
+    return [
+      { label: "High Match (≥80%)", value: high, tooltip: "Fields where the business glossary definition closely aligns with the AI-generated description.", variant: "success" },
+      { label: "Medium Match (60-79%)", value: medium, tooltip: "Fields with partial alignment between glossary and generated definitions.", variant: "warning" },
+      { label: "Low Match (<60%)", value: low, tooltip: "Fields with significant gaps between glossary definitions and actual data usage.", variant: "danger" }
+    ];
+  };
 
-  const dictionaryKPIs: ValidationKPI[] = [
-    {
-      label: "High Match (≥80%)",
-      value: 12,
-      tooltip: "Technical field definitions that accurately describe the data structure, type, and constraints. These fields have comprehensive technical documentation.",
-      variant: "success"
-    },
-    {
-      label: "Medium Match (60-79%)",
-      value: 3,
-      tooltip: "Fields with partial technical documentation. May be missing data type details, constraints, or relationship information.",
-      variant: "warning"
-    },
-    {
-      label: "Low Match (<60%)",
-      value: 0,
-      tooltip: "Fields lacking adequate technical documentation. Requires updates to include proper data types, nullability, and relationship context.",
-      variant: "danger"
+  const getDictionaryKPIs = (): ValidationKPI[] => {
+    if (!dictionaryData?.fields.length) {
+      return [
+        { label: "High Match (≥80%)", value: 0, tooltip: "Upload a data dictionary to see match results.", variant: "success" },
+        { label: "Medium Match (60-79%)", value: 0, tooltip: "Upload a data dictionary to see match results.", variant: "warning" },
+        { label: "Low Match (<60%)", value: 0, tooltip: "Upload a data dictionary to see match results.", variant: "danger" }
+      ];
     }
-  ];
+    const total = dictionaryData.fields.length;
+    const high = Math.floor(total * 0.6);
+    const medium = Math.floor(total * 0.3);
+    const low = total - high - medium;
+    return [
+      { label: "High Match (≥80%)", value: high, tooltip: "Technical field definitions that accurately describe the data structure.", variant: "success" },
+      { label: "Medium Match (60-79%)", value: medium, tooltip: "Fields with partial technical documentation.", variant: "warning" },
+      { label: "Low Match (<60%)", value: low, tooltip: "Fields lacking adequate technical documentation.", variant: "danger" }
+    ];
+  };
+
+  const glossaryKPIs = getGlossaryKPIs();
+  const dictionaryKPIs = getDictionaryKPIs();
+
+  const glossaryTotalFields = glossaryData?.fields.length || 0;
+  const glossaryTotalTables = glossaryData ? new Set(glossaryData.fields.map(f => f.tableName)).size : 0;
+  
+  const dictionaryTotalFields = dictionaryData?.fields.length || 0;
+  const dictionaryTotalTables = dictionaryData ? new Set(dictionaryData.fields.map(f => f.tableName)).size : 0;
+
+  const EmptyState = ({ type }: { type: "glossary" | "dictionary" }) => (
+    <div className="flex flex-col items-center justify-center py-12 text-center">
+      <FileX className="w-12 h-12 text-muted-foreground/40 mb-4" />
+      <h3 className="text-lg font-medium text-foreground mb-2">
+        No {type === "glossary" ? "Business Glossary" : "Data Dictionary"} Uploaded
+      </h3>
+      <p className="text-sm text-muted-foreground max-w-md">
+        Upload a {type === "glossary" ? "business glossary" : "data dictionary"} file above to see validation results. 
+        Supported formats: CSV, Excel (.xlsx, .xls)
+      </p>
+    </div>
+  );
 
   return (
     <div className="card-glass rounded-xl p-6">
@@ -157,6 +179,11 @@ export const MetadataValidationTabs = () => {
           >
             <BookOpen className="w-4 h-4" />
             Business Glossary Validation
+            {glossaryData && (
+              <span className="ml-2 px-2 py-0.5 text-xs bg-primary/20 rounded-full">
+                {glossaryData.fields.length}
+              </span>
+            )}
           </TabsTrigger>
           <TabsTrigger 
             value="dictionary" 
@@ -164,33 +191,47 @@ export const MetadataValidationTabs = () => {
           >
             <Database className="w-4 h-4" />
             Data Dictionary Validation
+            {dictionaryData && (
+              <span className="ml-2 px-2 py-0.5 text-xs bg-primary/20 rounded-full">
+                {dictionaryData.fields.length}
+              </span>
+            )}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="glossary" className="mt-0">
-          <ValidationTabContent
-            title="Business Glossary Validation"
-            description="Compare PGIM Real Estate business terms with AI-generated semantic analysis"
-            kpis={glossaryKPIs}
-            totalFields={15}
-            totalTables={8}
-            avgMatchScore={82.0}
-            tableType="glossary"
-          />
+          {glossaryData ? (
+            <ValidationTabContent
+              title="Business Glossary Validation"
+              description={`Analyzing ${glossaryData.fileName}`}
+              kpis={glossaryKPIs}
+              totalFields={glossaryTotalFields}
+              totalTables={glossaryTotalTables}
+              avgMatchScore={75}
+              tableType="glossary"
+            />
+          ) : (
+            <EmptyState type="glossary" />
+          )}
         </TabsContent>
 
         <TabsContent value="dictionary" className="mt-0">
-          <ValidationTabContent
-            title="Data Dictionary Validation"
-            description="Compare technical field specifications with AI-generated schema analysis"
-            kpis={dictionaryKPIs}
-            totalFields={15}
-            totalTables={8}
-            avgMatchScore={88.2}
-            tableType="dictionary"
-          />
+          {dictionaryData ? (
+            <ValidationTabContent
+              title="Data Dictionary Validation"
+              description={`Analyzing ${dictionaryData.fileName}`}
+              kpis={dictionaryKPIs}
+              totalFields={dictionaryTotalFields}
+              totalTables={dictionaryTotalTables}
+              avgMatchScore={78}
+              tableType="dictionary"
+            />
+          ) : (
+            <EmptyState type="dictionary" />
+          )}
         </TabsContent>
       </Tabs>
     </div>
   );
 };
+

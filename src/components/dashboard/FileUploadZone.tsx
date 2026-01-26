@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Upload, FileText, CheckCircle, X, RefreshCw } from "lucide-react";
+import { Upload, FileText, CheckCircle, X, RefreshCw, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +15,8 @@ interface FileUploadZoneProps {
   acceptedFormats: string;
   onRegenerate?: () => void;
   showRegenerate?: boolean;
+  onFileUpload?: (file: File) => Promise<void>;
+  accept?: string;
 }
 
 export const FileUploadZone = ({ 
@@ -22,10 +24,13 @@ export const FileUploadZone = ({
   description, 
   acceptedFormats,
   onRegenerate,
-  showRegenerate = false 
+  showRegenerate = false,
+  onFileUpload,
+  accept
 }: FileUploadZoneProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState<UploadedFile[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -37,7 +42,20 @@ export const FileUploadZone = ({
     setIsDragging(false);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
+  const processFile = async (file: File) => {
+    if (onFileUpload) {
+      setIsProcessing(true);
+      try {
+        await onFileUpload(file);
+      } catch (error) {
+        console.error("Error processing file:", error);
+      } finally {
+        setIsProcessing(false);
+      }
+    }
+  };
+
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
     
@@ -48,10 +66,15 @@ export const FileUploadZone = ({
       status: "complete" as const
     }));
     
-    setFiles(prev => [...prev, ...newFiles]);
-  }, []);
+    setFiles(newFiles);
+    
+    // Process the first file if handler provided
+    if (droppedFiles.length > 0) {
+      await processFile(droppedFiles[0]);
+    }
+  }, [onFileUpload]);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files);
       const newFiles: UploadedFile[] = selectedFiles.map(file => ({
@@ -59,7 +82,12 @@ export const FileUploadZone = ({
         size: `${(file.size / 1024).toFixed(1)} KB`,
         status: "complete" as const
       }));
-      setFiles(prev => [...prev, ...newFiles]);
+      setFiles(newFiles);
+      
+      // Process the first file if handler provided
+      if (selectedFiles.length > 0) {
+        await processFile(selectedFiles[0]);
+      }
     }
   };
 
@@ -98,21 +126,32 @@ export const FileUploadZone = ({
           id={`file-${title}`}
           type="file"
           className="hidden"
-          multiple
+          accept={accept}
           onChange={handleFileSelect}
         />
         <div className="flex flex-col items-center gap-3">
-          <div className="p-4 rounded-full bg-primary/10">
-            <Upload className="w-8 h-8 text-primary" />
-          </div>
-          <div className="text-center">
-            <p className="text-sm font-medium text-foreground">
-              Drop files here or click to browse
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              {acceptedFormats}
-            </p>
-          </div>
+          {isProcessing ? (
+            <>
+              <div className="p-4 rounded-full bg-primary/10">
+                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+              </div>
+              <p className="text-sm font-medium text-foreground">Processing file...</p>
+            </>
+          ) : (
+            <>
+              <div className="p-4 rounded-full bg-primary/10">
+                <Upload className="w-8 h-8 text-primary" />
+              </div>
+              <div className="text-center">
+                <p className="text-sm font-medium text-foreground">
+                  Drop files here or click to browse
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {acceptedFormats}
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -135,7 +174,10 @@ export const FileUploadZone = ({
                   <CheckCircle className="w-5 h-5 text-success" />
                 )}
                 <button 
-                  onClick={() => removeFile(index)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeFile(index);
+                  }}
                   className="p-1 hover:bg-muted rounded"
                 >
                   <X className="w-4 h-4 text-muted-foreground" />
