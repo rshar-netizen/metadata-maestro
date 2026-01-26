@@ -203,7 +203,7 @@ export const MetadataValidationTabs = () => {
           {glossaryData ? (
             <ValidationTabContent
               title="Business Glossary Validation"
-              description={`Analyzing ${glossaryData.fileName}`}
+              description={`Analyzing ${glossaryData.fileName}${glossaryData.sheetCount && glossaryData.sheetCount > 1 ? ` (${glossaryData.sheetCount} sheets: ${glossaryData.sheetsProcessed?.join(', ')})` : ''}`}
               kpis={glossaryKPIs}
               totalFields={glossaryTotalFields}
               totalTables={glossaryTotalTables}
@@ -219,7 +219,7 @@ export const MetadataValidationTabs = () => {
           {dictionaryData ? (
             <ValidationTabContent
               title="Data Dictionary Validation"
-              description={`Analyzing ${dictionaryData.fileName}`}
+              description={`Analyzing ${dictionaryData.fileName}${dictionaryData.sheetCount > 1 ? ` (${dictionaryData.sheetCount} sheets: ${dictionaryData.sheetsProcessed.join(', ')})` : ''}`}
               kpis={dictionaryKPIs}
               totalFields={dictionaryTotalFields}
               totalTables={dictionaryTotalTables}

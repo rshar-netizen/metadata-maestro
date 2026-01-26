@@ -650,6 +650,7 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
     return {
       fieldName: field.fieldName,
       tableName: field.tableName || "unknown",
+      sheetName: field.sheetName,
       originalDescription: field.dictionaryDefinition,
       generatedDescription: ai.spec,
       originalDataType: field.dataType,
@@ -678,6 +679,7 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
         <table className="w-full">
           <thead>
             <tr className="bg-muted/30">
+              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Sheet</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Table</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Field Name</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -738,6 +740,11 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
               
               return (
                 <tr key={index} className="data-table-row">
+                  <td className="px-4 py-4">
+                    <span className="text-xs font-medium text-muted-foreground bg-muted/50 px-2 py-1 rounded">
+                      {row.sheetName || "-"}
+                    </span>
+                  </td>
                   <td className="px-4 py-4">
                     <span className="text-xs font-medium text-info bg-info/10 px-2 py-1 rounded">
                       {row.tableName}

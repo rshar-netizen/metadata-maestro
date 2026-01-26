@@ -13,16 +13,21 @@ export interface DictionaryField {
   dictionaryDefinition: string;
   dataType: string;
   sensitivity: string;
+  sheetName?: string;
 }
 
 export interface ParsedGlossaryData {
   fields: GlossaryField[];
   fileName: string;
+  sheetCount?: number;
+  sheetsProcessed?: string[];
 }
 
 export interface ParsedDictionaryData {
   fields: DictionaryField[];
   fileName: string;
+  sheetCount: number;
+  sheetsProcessed: string[];
 }
 
 export const useGlossaryData = () => {
@@ -38,21 +43,33 @@ export const useGlossaryData = () => {
         try {
           const data = e.target?.result;
           const workbook = XLSX.read(data, { type: "binary" });
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-          // Map Excel columns to our expected format
-          // Expected columns: field_name, table_name, definition (or similar variations)
-          const fields: GlossaryField[] = jsonData.map((row: any) => ({
-            fieldName: row.field_name || row.fieldName || row.Field || row.field || row["Field Name"] || "",
-            tableName: row.table_name || row.tableName || row.Table || row.table || row["Table Name"] || "",
-            glossaryDefinition: row.definition || row.Definition || row.description || row.Description || row["Business Definition"] || "",
-          })).filter(f => f.fieldName && f.glossaryDefinition);
+          
+          const allFields: GlossaryField[] = [];
+          const sheetsProcessed: string[] = [];
+          
+          // Process ALL sheets in the workbook
+          workbook.SheetNames.forEach(sheetName => {
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+            
+            if (jsonData.length > 0) {
+              sheetsProcessed.push(sheetName);
+              
+              const fields: GlossaryField[] = jsonData.map((row: any) => ({
+                fieldName: row.field_name || row.fieldName || row.Field || row.field || row["Field Name"] || row["Column Name"] || "",
+                tableName: row.table_name || row.tableName || row.Table || row.table || row["Table Name"] || sheetName,
+                glossaryDefinition: row.definition || row.Definition || row.description || row.Description || row["Business Definition"] || "",
+              })).filter(f => f.fieldName && f.glossaryDefinition);
+              
+              allFields.push(...fields);
+            }
+          });
 
           resolve({
-            fields,
+            fields: allFields,
             fileName: file.name,
+            sheetCount: workbook.SheetNames.length,
+            sheetsProcessed
           });
         } catch (error) {
           reject(error);
@@ -72,22 +89,36 @@ export const useGlossaryData = () => {
         try {
           const data = e.target?.result;
           const workbook = XLSX.read(data, { type: "binary" });
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-          // Map Excel columns to our expected format
-          const fields: DictionaryField[] = jsonData.map((row: any) => ({
-            fieldName: row.field_name || row.fieldName || row.Field || row.field || row["Field Name"] || row["Column Name"] || "",
-            tableName: row.table_name || row.tableName || row.Table || row.table || row["Table Name"] || "",
-            dictionaryDefinition: row.definition || row.Definition || row.description || row.Description || row["Technical Definition"] || row.Specification || "",
-            dataType: row.data_type || row.dataType || row.Type || row.type || row["Data Type"] || "",
-            sensitivity: row.sensitivity || row.Sensitivity || row.classification || row.Classification || row["Data Classification"] || "Internal",
-          })).filter(f => f.fieldName && f.dictionaryDefinition);
+          
+          const allFields: DictionaryField[] = [];
+          const sheetsProcessed: string[] = [];
+          
+          // Process ALL sheets in the workbook
+          workbook.SheetNames.forEach(sheetName => {
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+            
+            if (jsonData.length > 0) {
+              sheetsProcessed.push(sheetName);
+              
+              const fields: DictionaryField[] = jsonData.map((row: any) => ({
+                fieldName: row.field_name || row.fieldName || row.Field || row.field || row["Field Name"] || row["Column Name"] || row["column_name"] || "",
+                tableName: row.table_name || row.tableName || row.Table || row.table || row["Table Name"] || sheetName,
+                dictionaryDefinition: row.definition || row.Definition || row.description || row.Description || row["Technical Definition"] || row.Specification || "",
+                dataType: row.data_type || row.dataType || row.Type || row.type || row["Data Type"] || row["DataType"] || "",
+                sensitivity: row.sensitivity || row.Sensitivity || row.classification || row.Classification || row["Data Classification"] || "Internal",
+                sheetName: sheetName
+              })).filter(f => f.fieldName);
+              
+              allFields.push(...fields);
+            }
+          });
 
           resolve({
-            fields,
+            fields: allFields,
             fileName: file.name,
+            sheetCount: workbook.SheetNames.length,
+            sheetsProcessed
           });
         } catch (error) {
           reject(error);
