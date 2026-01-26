@@ -25,15 +25,6 @@ const alerts: Alert[] = [
     acknowledged: false
   },
   {
-    id: "2",
-    type: "warning",
-    title: "Metadata Match Score Below Threshold",
-    description: "Private Credit Borrower subdomain showing <60% glossary match score",
-    domain: "Private Credit",
-    timestamp: "15 min ago",
-    acknowledged: false
-  },
-  {
     id: "3",
     type: "warning",
     title: "Data Dictionary Update Required",
