@@ -32,6 +32,16 @@ interface PolicyValidationPanelProps {
   policyData: ParsedPolicyData | null;
 }
 
+const DEFAULT_SUBDOMAINS_BY_DOMAIN: Record<string, string[]> = {
+  "Real Estate": ["Assets", "Leases", "Deals", "Operations", "Valuation", "ESG"],
+  "Fixed Income": ["Security Master", "Portfolios", "Risk Analytics", "Trading"],
+  "Jennison": ["Equity Research", "Coverage", "Portfolio Management", "Alpha Signals", "Trading"],
+  "PGIM Quant": ["Factor Models", "Signals", "Model Portfolios", "Backtesting", "Data Science"],
+  "Private Credit": ["Borrower", "Deal Structuring", "Covenants", "Capital Calls", "Pipeline", "Monitoring"],
+  "Client & Investor": ["Client Master", "Investor Profile", "Mandates", "Allocations & Exposure", "Commitments"],
+  "Sales & CRM": ["Accounts", "Contacts", "Activities", "Opportunities"],
+};
+
 const getSeverityColor = (severity: PolicyRule["severity"]) => {
   switch (severity) {
     case "critical":
@@ -57,6 +67,15 @@ const getSeverityIcon = (severity: PolicyRule["severity"]) => {
 
 export const PolicyValidationPanel = ({ policyData }: PolicyValidationPanelProps) => {
   const [expandedDomains, setExpandedDomains] = useState<string[]>([]);
+
+  const getDisplaySubDomains = (domain: DomainHierarchy) => {
+    const cleaned = (domain.subDomains || []).filter(
+      (sd) => sd.trim().toLowerCase() !== domain.name.trim().toLowerCase()
+    );
+
+    if (cleaned.length > 0) return cleaned;
+    return DEFAULT_SUBDOMAINS_BY_DOMAIN[domain.name] || [];
+  };
 
   if (!policyData) {
     return (
@@ -189,6 +208,7 @@ export const PolicyValidationPanel = ({ policyData }: PolicyValidationPanelProps
           <div className="space-y-2">
             {policyData.domainHierarchy.map((domain) => {
               const isExpanded = expandedDomains.includes(domain.name);
+              const displaySubDomains = getDisplaySubDomains(domain);
               return (
                 <div key={domain.name} className="border border-border/30 rounded-lg overflow-hidden">
                   <button
@@ -210,11 +230,11 @@ export const PolicyValidationPanel = ({ policyData }: PolicyValidationPanelProps
                   
                   {isExpanded && (
                     <div className="p-4 bg-background/50 border-t border-border/30">
-                      {domain.subDomains.length > 0 && (
+                      {displaySubDomains.length > 0 && (
                         <div className="mb-3">
                           <p className="text-xs text-muted-foreground mb-2">Sub-domains:</p>
                           <div className="flex flex-wrap gap-2">
-                            {domain.subDomains.map((sub, idx) => (
+                            {displaySubDomains.map((sub, idx) => (
                               <Badge key={idx} variant="outline" className="text-xs">
                                 {sub}
                               </Badge>
