@@ -6,6 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useMetadata } from "@/contexts/MetadataContext";
 
 interface FieldComparison {
   fieldName: string;
@@ -492,10 +493,71 @@ interface MetadataComparisonTableProps {
   type: "glossary" | "dictionary";
 }
 
+// Generate simulated AI definition based on original
+const generateAIDefinition = (fieldName: string, originalDef: string): { definition: string; score: number; explanation: string } => {
+  // Simulate AI-generated definitions with varying match scores
+  const baseScore = 60 + Math.floor(Math.random() * 35); // 60-95%
+  const explanations = [
+    "High semantic alignment with minor phrasing differences",
+    "Good alignment, AI adds contextual detail",
+    "Partial alignment, consider reviewing terminology",
+    "Strong alignment with business context",
+    "AI detected additional usage patterns"
+  ];
+  
+  return {
+    definition: `AI-analyzed: ${originalDef}. Detected usage pattern suggests this field is used for ${fieldName.replace(/_/g, ' ')} operations.`,
+    score: baseScore,
+    explanation: explanations[Math.floor(Math.random() * explanations.length)]
+  };
+};
+
+// Generate simulated AI specs for dictionary
+const generateAISpec = (fieldName: string, originalSpec: string, dataType: string): { spec: string; score: number; explanation: string; generatedType: string; typeMatch: boolean } => {
+  const baseScore = 65 + Math.floor(Math.random() * 30);
+  const typeVariations: Record<string, string[]> = {
+    "string": ["VARCHAR(255)", "TEXT", "string"],
+    "int": ["INTEGER", "BIGINT", "int"],
+    "float": ["DECIMAL(10,2)", "FLOAT", "float"],
+    "date": ["DATE", "TIMESTAMP", "date"],
+    "boolean": ["BOOLEAN", "boolean"],
+  };
+  
+  const normalizedType = dataType.toLowerCase();
+  const possibleTypes = typeVariations[normalizedType] || [dataType];
+  const generatedType = possibleTypes[Math.floor(Math.random() * possibleTypes.length)];
+  const typeMatch = generatedType.toLowerCase().includes(normalizedType) || normalizedType.includes(generatedType.toLowerCase());
+  
+  return {
+    spec: `${generatedType}, ${originalSpec.includes("NOT NULL") ? "NOT NULL" : "nullable"}, indexed for queries`,
+    score: baseScore,
+    explanation: typeMatch ? "Technical specs align well" : "Type interpretation differs, review recommended",
+    generatedType,
+    typeMatch
+  };
+};
+
 export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) => {
-  const data = type === "glossary" ? glossaryMockData : dictionaryMockData;
+  const { glossaryData, dictionaryData } = useMetadata();
 
   if (type === "glossary") {
+    // Use uploaded data if available, otherwise show empty
+    const glossaryRows = glossaryData?.fields.map(field => {
+      const ai = generateAIDefinition(field.fieldName, field.glossaryDefinition);
+      return {
+        fieldName: field.fieldName,
+        tableName: field.tableName || "unknown",
+        originalDescription: field.glossaryDefinition,
+        generatedDescription: ai.definition,
+        score: ai.score,
+        explanation: ai.explanation
+      };
+    }) || [];
+
+    if (glossaryRows.length === 0) {
+      return null;
+    }
+
     return (
       <div className="card-glass rounded-xl overflow-hidden">
         <div className="p-6 border-b border-border/30">
@@ -529,9 +591,8 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
               </tr>
             </thead>
             <tbody>
-              {data.map((row, index) => {
-                const score = row.descriptionMatchScore;
-                const ScoreIcon = getScoreIcon(score);
+              {glossaryRows.map((row, index) => {
+                const ScoreIcon = getScoreIcon(row.score);
                 return (
                   <tr key={index} className="data-table-row">
                     <td className="px-4 py-4">
@@ -557,15 +618,15 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
                     <td className="px-4 py-4">
                       <div className="flex flex-col items-center gap-2">
                         <div className="flex items-center gap-2">
-                          <ScoreIcon className={cn("w-4 h-4", getScoreColor(score))} />
-                          <span className={cn("text-lg font-bold", getScoreColor(score))}>
-                            {score}%
+                          <ScoreIcon className={cn("w-4 h-4", getScoreColor(row.score))} />
+                          <span className={cn("text-lg font-bold", getScoreColor(row.score))}>
+                            {row.score}%
                           </span>
                         </div>
                         <div className="score-bar w-16">
                           <div 
-                            className={cn("score-fill", getScoreBg(score))}
-                            style={{ width: `${score}%` }}
+                            className={cn("score-fill", getScoreBg(row.score))}
+                            style={{ width: `${row.score}%` }}
                           />
                         </div>
                       </div>
@@ -581,6 +642,31 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
   }
 
   // Data Dictionary view
+  const dictionaryRows = dictionaryData?.fields.map(field => {
+    const ai = generateAISpec(field.fieldName, field.dictionaryDefinition, field.dataType);
+    const sensitivityMatch = Math.random() > 0.3; // 70% chance of match
+    const generatedSensitivity = sensitivityMatch ? field.sensitivity : (field.sensitivity === "Internal" ? "Confidential" : "Internal");
+    
+    return {
+      fieldName: field.fieldName,
+      tableName: field.tableName || "unknown",
+      originalDescription: field.dictionaryDefinition,
+      generatedDescription: ai.spec,
+      originalDataType: field.dataType,
+      generatedDataType: ai.generatedType,
+      typeMatch: ai.typeMatch,
+      originalSensitivity: field.sensitivity,
+      generatedSensitivity,
+      sensitivityMatch,
+      score: ai.score,
+      explanation: ai.explanation
+    };
+  }) || [];
+
+  if (dictionaryRows.length === 0) {
+    return null;
+  }
+
   return (
     <div className="card-glass rounded-xl overflow-hidden">
       <div className="p-6 border-b border-border/30">
@@ -635,7 +721,7 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
                         <Info className="w-3.5 h-3.5 text-muted-foreground/60 hover:text-primary cursor-help" />
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
-                        <p>Composite score: Definition match (60%), Type match (20%), Sensitivity match (20%). Reflects overall technical documentation accuracy.</p>
+                        <p>Composite score: Definition match (60%), Type match (20%), Sensitivity match (20%).</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -644,9 +730,12 @@ export const MetadataComparisonTable = ({ type }: MetadataComparisonTableProps) 
             </tr>
           </thead>
           <tbody>
-            {data.map((row, index) => {
-              const overallScore = calculateOverallScore(row);
+            {dictionaryRows.map((row, index) => {
+              const typeScore = row.typeMatch ? 100 : 0;
+              const sensitivityScore = row.sensitivityMatch ? 100 : 0;
+              const overallScore = Math.round(row.score * 0.6 + typeScore * 0.2 + sensitivityScore * 0.2);
               const ScoreIcon = getScoreIcon(overallScore);
+              
               return (
                 <tr key={index} className="data-table-row">
                   <td className="px-4 py-4">
