@@ -34,7 +34,7 @@ export const DataSourcesTab = () => {
       {/* Upload Section */}
       <div>
         <h2 className="text-xl font-semibold text-foreground mb-4">Upload Data Sources</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl">
           <FileUploadZone
             title="Business Glossary"
             description="Upload your organization's business glossary definitions"
