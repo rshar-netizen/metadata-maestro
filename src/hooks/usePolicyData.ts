@@ -34,15 +34,15 @@ export interface ParsedPolicyData {
   }[];
 }
 
-// Domain keywords for extraction
+// Domain keywords for extraction with predefined sub-domains
 const DOMAIN_KEYWORDS = [
-  { domain: "Real Estate", keywords: ["real estate", "property", "lease", "tenant", "capex", "valuation", "esg", "assets"] },
-  { domain: "Fixed Income", keywords: ["fixed income", "bond", "issuer", "duration", "yield", "credit", "fi_"] },
-  { domain: "Jennison", keywords: ["jennison", "equity research", "coverage", "alpha", "analyst"] },
-  { domain: "PGIM Quant", keywords: ["quant", "factor", "model", "backtest", "signal", "feature store"] },
-  { domain: "Private Credit", keywords: ["private credit", "borrower", "sponsor", "loan", "covenant", "capital call"] },
-  { domain: "Client & Investor", keywords: ["client", "investor", "mandate", "exposure", "commitment", "allocation"] },
-  { domain: "Sales & CRM", keywords: ["sales", "crm", "account", "contact", "opportunity", "meeting", "pipeline"] }
+  { domain: "Real Estate", keywords: ["real estate", "property", "lease", "tenant", "capex", "valuation", "esg", "assets"], subDomains: ["Assets", "Leases", "Deals", "Operations", "Valuation", "ESG"] },
+  { domain: "Fixed Income", keywords: ["fixed income", "bond", "issuer", "duration", "yield", "credit", "fi_"], subDomains: ["Security Master", "Portfolios", "Risk Analytics", "Trading"] },
+  { domain: "Jennison", keywords: ["jennison", "equity research", "coverage", "alpha", "analyst"], subDomains: ["Equity Research", "Coverage", "Portfolio Management", "Alpha Signals", "Trading"] },
+  { domain: "PGIM Quant", keywords: ["quant", "factor", "model", "backtest", "signal", "feature store"], subDomains: ["Factor Models", "Signals", "Model Portfolios", "Backtesting", "Data Science"] },
+  { domain: "Private Credit", keywords: ["private credit", "borrower", "sponsor", "loan", "covenant", "capital call"], subDomains: ["Borrower", "Deal Structuring", "Covenants", "Capital Calls", "Pipeline", "Monitoring"] },
+  { domain: "Client & Investor", keywords: ["client", "investor", "mandate", "exposure", "commitment", "allocation"], subDomains: ["Client Master", "Investor Profile", "Mandates", "Allocations & Exposure", "Commitments"] },
+  { domain: "Sales & CRM", keywords: ["sales", "crm", "account", "contact", "opportunity", "meeting", "pipeline"], subDomains: ["Accounts", "Contacts", "Activities", "Opportunities"] }
 ];
 
 // Policy category keywords
@@ -63,11 +63,10 @@ export const usePolicyData = () => {
     const domains: DomainHierarchy[] = [];
     const contentLower = content.toLowerCase();
 
-    DOMAIN_KEYWORDS.forEach(({ domain, keywords }) => {
+    DOMAIN_KEYWORDS.forEach(({ domain, keywords, subDomains: predefinedSubDomains }) => {
       const foundKeywords = keywords.filter(kw => contentLower.includes(kw));
       if (foundKeywords.length > 0) {
-        // Extract potential sub-domains and tables
-        const subDomains: string[] = [];
+        // Extract potential tables
         const tables: string[] = [];
         
         // Look for table-like patterns (word_word format)
@@ -81,19 +80,11 @@ export const usePolicyData = () => {
           }
         });
 
-        // Look for capitalized sub-domain names near domain keywords
-        const subDomainPattern = new RegExp(`(${keywords.join('|')})\\s*[-:]?\\s*([A-Z][a-zA-Z\\s]+)`, 'gi');
-        const subMatches = content.matchAll(subDomainPattern);
-        for (const match of subMatches) {
-          const subDomain = match[2]?.trim();
-          if (subDomain && subDomain.length < 50 && !subDomains.includes(subDomain)) {
-            subDomains.push(subDomain);
-          }
-        }
-
+        // Use predefined sub-domains instead of extracting from content
+        // This ensures consistent, correct sub-domain naming
         domains.push({
           name: domain,
-          subDomains: subDomains.slice(0, 6),
+          subDomains: predefinedSubDomains,
           tables: tables.slice(0, 10),
           description: `Domain identified from ${foundKeywords.length} keyword matches`
         });
