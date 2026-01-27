@@ -1,6 +1,5 @@
 import { FileUploadZone } from "./FileUploadZone";
 import { MetadataValidationTabs } from "./MetadataValidationTabs";
-import { PolicyValidationPanel } from "./PolicyValidationPanel";
 import { Target, BookOpen, Database, Clock, AlertTriangle, TrendingUp, Info } from "lucide-react";
 import { useMetadata } from "@/contexts/MetadataContext";
 import {
@@ -14,10 +13,8 @@ export const DataSourcesTab = () => {
   const { 
     handleGlossaryUpload, 
     handleDictionaryUpload,
-    handlePolicyUpload,
     glossaryData,
-    dictionaryData,
-    policyData
+    dictionaryData
   } = useMetadata();
 
   // Calculate dynamic accuracy based on uploaded data
@@ -115,10 +112,10 @@ export const DataSourcesTab = () => {
             <span className="text-xs text-muted-foreground">Last Scan</span>
           </div>
           <p className="text-lg font-bold text-foreground">
-            {glossaryData || dictionaryData || policyData ? "Just now" : "--"}
+            {glossaryData || dictionaryData ? "Just now" : "--"}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
-            {glossaryData || dictionaryData || policyData ? "manual upload" : "no data"}
+            {glossaryData || dictionaryData ? "manual upload" : "no data"}
           </p>
         </div>
 
@@ -163,15 +160,6 @@ export const DataSourcesTab = () => {
             }}
           />
           <FileUploadZone
-            title="Policy and Other Documents"
-            description="Upload compliance and governance policy documents"
-            acceptedFormats="PDF, DOCX, TXT"
-            accept=".pdf,.docx,.txt"
-            onFileUpload={async (file) => {
-              await handlePolicyUpload(file);
-            }}
-          />
-          <FileUploadZone
             title="Sample Dataset"
             description="Upload sample data for validation testing"
             acceptedFormats="CSV, Parquet, JSON"
@@ -179,9 +167,6 @@ export const DataSourcesTab = () => {
           />
         </div>
       </div>
-
-      {/* Policy Validation Panel - Shows when policy data is uploaded */}
-      {policyData && <PolicyValidationPanel policyData={policyData} />}
 
       {/* Metadata Validation Tabs */}
       <MetadataValidationTabs />
