@@ -28,104 +28,104 @@ interface Domain {
   status: "healthy" | "warning" | "critical";
 }
 
-// Default domain hierarchy structure with sample data
+// Default domain hierarchy structure with sample data based on PGIM files
 const defaultDomainHierarchy: Domain[] = [
   {
     name: "Real Estate",
-    overallScore: 87,
-    glossaryScore: 89,
-    dictionaryScore: 85,
+    overallScore: 84,
+    glossaryScore: 87,
+    dictionaryScore: 84,
     status: "healthy",
     subDomains: [
-      { name: "Assets", tables: ["property_master", "property_portfolio_map"], glossaryScore: 92, dictionaryScore: 88, fieldsCount: 156, lastUpdated: "2 hours ago", trend: 4.2 },
-      { name: "Leases", tables: ["lease_master", "tenant_master"], glossaryScore: 88, dictionaryScore: 84, fieldsCount: 124, lastUpdated: "1 day ago", trend: 2.1 },
-      { name: "Deals", tables: ["deal_pipeline"], glossaryScore: 85, dictionaryScore: 82, fieldsCount: 67, lastUpdated: "3 hours ago", trend: 1.5 },
-      { name: "Operations", tables: ["capex_project"], glossaryScore: 91, dictionaryScore: 87, fieldsCount: 89, lastUpdated: "5 hours ago", trend: 3.8 },
-      { name: "Valuation", tables: ["property_valuation"], glossaryScore: 86, dictionaryScore: 83, fieldsCount: 54, lastUpdated: "1 day ago", trend: -0.5 },
-      { name: "ESG", tables: ["property_esg_metrics"], glossaryScore: 78, dictionaryScore: 72, fieldsCount: 48, lastUpdated: "2 days ago", trend: 5.2 }
+      { name: "Assets", tables: ["property_master", "property_portfolio_map"], glossaryScore: 92, dictionaryScore: 88, fieldsCount: 24, lastUpdated: "2 hours ago", trend: 3.2 },
+      { name: "Leases", tables: ["lease_master", "tenant_master"], glossaryScore: 85, dictionaryScore: 82, fieldsCount: 22, lastUpdated: "1 day ago", trend: 1.8 },
+      { name: "Deals", tables: ["deal_pipeline"], glossaryScore: 88, dictionaryScore: 85, fieldsCount: 11, lastUpdated: "3 hours ago", trend: 2.4 },
+      { name: "Operations", tables: ["capex_project"], glossaryScore: 86, dictionaryScore: 83, fieldsCount: 12, lastUpdated: "5 hours ago", trend: 1.1 },
+      { name: "Valuation", tables: ["property_valuation"], glossaryScore: 89, dictionaryScore: 86, fieldsCount: 10, lastUpdated: "1 day ago", trend: 4.5 },
+      { name: "ESG", tables: ["property_esg_metrics"], glossaryScore: 82, dictionaryScore: 78, fieldsCount: 11, lastUpdated: "2 days ago", trend: -0.8 }
     ]
   },
   {
     name: "Fixed Income",
-    overallScore: 74,
-    glossaryScore: 76,
-    dictionaryScore: 72,
+    overallScore: 72,
+    glossaryScore: 74,
+    dictionaryScore: 70,
     status: "warning",
     subDomains: [
-      { name: "Security Master", tables: ["bond_master", "issuer_master"], glossaryScore: 82, dictionaryScore: 78, fieldsCount: 198, lastUpdated: "4 hours ago", trend: 3.1 },
-      { name: "Portfolios", tables: ["fi_portfolio"], glossaryScore: 75, dictionaryScore: 71, fieldsCount: 87, lastUpdated: "1 day ago", trend: 1.2 },
-      { name: "Risk Analytics", tables: ["duration_metrics"], glossaryScore: 68, dictionaryScore: 64, fieldsCount: 112, lastUpdated: "6 hours ago", trend: -2.4 },
-      { name: "Trading", tables: ["fi_trade"], glossaryScore: 72, dictionaryScore: 69, fieldsCount: 145, lastUpdated: "30 min ago", trend: 0.8 }
+      { name: "Security Master", tables: ["bond_master", "issuer_master"], glossaryScore: 78, dictionaryScore: 74, fieldsCount: 45, lastUpdated: "4 hours ago", trend: 2.1 },
+      { name: "Portfolios", tables: ["fi_portfolio"], glossaryScore: 72, dictionaryScore: 68, fieldsCount: 28, lastUpdated: "1 day ago", trend: 0.9 },
+      { name: "Risk Analytics", tables: ["duration_metrics"], glossaryScore: 68, dictionaryScore: 64, fieldsCount: 34, lastUpdated: "6 hours ago", trend: -1.5 },
+      { name: "Trading", tables: ["fi_trade"], glossaryScore: 75, dictionaryScore: 71, fieldsCount: 52, lastUpdated: "30 min ago", trend: 1.2 }
     ]
   },
   {
     name: "Jennison",
-    overallScore: 91,
-    glossaryScore: 93,
-    dictionaryScore: 89,
+    overallScore: 89,
+    glossaryScore: 91,
+    dictionaryScore: 87,
     status: "healthy",
     subDomains: [
-      { name: "Equity Research", tables: ["research_model", "analyst_note"], glossaryScore: 95, dictionaryScore: 92, fieldsCount: 167, lastUpdated: "1 hour ago", trend: 2.3 },
-      { name: "Coverage", tables: ["coverage_universe"], glossaryScore: 94, dictionaryScore: 90, fieldsCount: 78, lastUpdated: "3 hours ago", trend: 1.8 },
-      { name: "Portfolio Management", tables: ["equity_portfolio"], glossaryScore: 91, dictionaryScore: 88, fieldsCount: 134, lastUpdated: "2 hours ago", trend: 0.9 },
-      { name: "Alpha Signals", tables: ["alpha_signal"], glossaryScore: 88, dictionaryScore: 85, fieldsCount: 56, lastUpdated: "5 hours ago", trend: 4.5 },
-      { name: "Trading", tables: ["equity_trade"], glossaryScore: 92, dictionaryScore: 89, fieldsCount: 112, lastUpdated: "45 min ago", trend: 1.1 }
+      { name: "Equity Research", tables: ["research_model", "analyst_note"], glossaryScore: 94, dictionaryScore: 90, fieldsCount: 38, lastUpdated: "1 hour ago", trend: 1.8 },
+      { name: "Coverage", tables: ["coverage_universe"], glossaryScore: 92, dictionaryScore: 88, fieldsCount: 22, lastUpdated: "3 hours ago", trend: 2.3 },
+      { name: "Portfolio Management", tables: ["equity_portfolio"], glossaryScore: 88, dictionaryScore: 85, fieldsCount: 31, lastUpdated: "2 hours ago", trend: 0.6 },
+      { name: "Alpha Signals", tables: ["alpha_signal"], glossaryScore: 86, dictionaryScore: 82, fieldsCount: 18, lastUpdated: "5 hours ago", trend: 3.1 },
+      { name: "Trading", tables: ["equity_trade"], glossaryScore: 90, dictionaryScore: 87, fieldsCount: 29, lastUpdated: "45 min ago", trend: 1.4 }
     ]
   },
   {
     name: "PGIM Quant",
-    overallScore: 54,
-    glossaryScore: 58,
-    dictionaryScore: 50,
+    overallScore: 58,
+    glossaryScore: 62,
+    dictionaryScore: 54,
     status: "critical",
     subDomains: [
-      { name: "Factor Models", tables: ["factor_model"], glossaryScore: 62, dictionaryScore: 55, fieldsCount: 89, lastUpdated: "3 days ago", trend: -3.2 },
-      { name: "Signals", tables: ["quant_signal"], glossaryScore: 48, dictionaryScore: 42, fieldsCount: 134, lastUpdated: "1 week ago", trend: -5.1 },
-      { name: "Model Portfolios", tables: ["model_portfolio"], glossaryScore: 55, dictionaryScore: 48, fieldsCount: 67, lastUpdated: "4 days ago", trend: -1.8 },
-      { name: "Backtesting", tables: ["backtest_run"], glossaryScore: 68, dictionaryScore: 62, fieldsCount: 78, lastUpdated: "2 days ago", trend: 2.1 },
-      { name: "Data Science", tables: ["feature_store"], glossaryScore: 52, dictionaryScore: 45, fieldsCount: 156, lastUpdated: "5 days ago", trend: -4.6 }
+      { name: "Factor Models", tables: ["factor_model"], glossaryScore: 65, dictionaryScore: 58, fieldsCount: 26, lastUpdated: "3 days ago", trend: -2.8 },
+      { name: "Signals", tables: ["quant_signal"], glossaryScore: 52, dictionaryScore: 46, fieldsCount: 41, lastUpdated: "1 week ago", trend: -4.2 },
+      { name: "Model Portfolios", tables: ["model_portfolio"], glossaryScore: 58, dictionaryScore: 51, fieldsCount: 19, lastUpdated: "4 days ago", trend: -1.3 },
+      { name: "Backtesting", tables: ["backtest_run"], glossaryScore: 72, dictionaryScore: 65, fieldsCount: 24, lastUpdated: "2 days ago", trend: 1.9 },
+      { name: "Data Science", tables: ["feature_store"], glossaryScore: 55, dictionaryScore: 48, fieldsCount: 47, lastUpdated: "5 days ago", trend: -3.7 }
     ]
   },
   {
     name: "Private Credit",
-    overallScore: 68,
-    glossaryScore: 71,
-    dictionaryScore: 65,
+    overallScore: 66,
+    glossaryScore: 69,
+    dictionaryScore: 63,
     status: "warning",
     subDomains: [
-      { name: "Borrower", tables: ["borrower_master", "sponsor_master"], glossaryScore: 78, dictionaryScore: 74, fieldsCount: 145, lastUpdated: "6 hours ago", trend: 2.8 },
-      { name: "Deal Structuring", tables: ["loan_master"], glossaryScore: 72, dictionaryScore: 68, fieldsCount: 98, lastUpdated: "1 day ago", trend: 1.4 },
-      { name: "Covenants", tables: ["covenant_definition"], glossaryScore: 65, dictionaryScore: 58, fieldsCount: 56, lastUpdated: "2 days ago", trend: -1.2 },
-      { name: "Capital Calls", tables: ["capital_call"], glossaryScore: 74, dictionaryScore: 70, fieldsCount: 34, lastUpdated: "8 hours ago", trend: 3.5 },
-      { name: "Pipeline", tables: ["pc_deal_pipeline"], glossaryScore: 68, dictionaryScore: 62, fieldsCount: 87, lastUpdated: "4 hours ago", trend: 0.6 },
-      { name: "Monitoring", tables: ["rating_history"], glossaryScore: 58, dictionaryScore: 52, fieldsCount: 67, lastUpdated: "3 days ago", trend: -2.9 }
+      { name: "Borrower", tables: ["borrower_master", "sponsor_master"], glossaryScore: 76, dictionaryScore: 72, fieldsCount: 38, lastUpdated: "6 hours ago", trend: 2.4 },
+      { name: "Deal Structuring", tables: ["loan_master"], glossaryScore: 70, dictionaryScore: 66, fieldsCount: 29, lastUpdated: "1 day ago", trend: 1.1 },
+      { name: "Covenants", tables: ["covenant_definition"], glossaryScore: 62, dictionaryScore: 55, fieldsCount: 16, lastUpdated: "2 days ago", trend: -1.8 },
+      { name: "Capital Calls", tables: ["capital_call"], glossaryScore: 72, dictionaryScore: 68, fieldsCount: 12, lastUpdated: "8 hours ago", trend: 2.9 },
+      { name: "Pipeline", tables: ["pc_deal_pipeline"], glossaryScore: 66, dictionaryScore: 60, fieldsCount: 24, lastUpdated: "4 hours ago", trend: 0.4 },
+      { name: "Monitoring", tables: ["rating_history"], glossaryScore: 56, dictionaryScore: 50, fieldsCount: 21, lastUpdated: "3 days ago", trend: -2.2 }
     ]
   },
   {
     name: "Client & Investor",
-    overallScore: 82,
-    glossaryScore: 84,
-    dictionaryScore: 80,
+    overallScore: 81,
+    glossaryScore: 83,
+    dictionaryScore: 79,
     status: "healthy",
     subDomains: [
-      { name: "Client Master", tables: ["client_master", "client_hierarchy", "client_relationship"], glossaryScore: 88, dictionaryScore: 85, fieldsCount: 234, lastUpdated: "2 hours ago", trend: 1.9 },
-      { name: "Investor Profile", tables: ["investor_profile", "investor_type"], glossaryScore: 85, dictionaryScore: 82, fieldsCount: 123, lastUpdated: "5 hours ago", trend: 2.4 },
-      { name: "Mandates", tables: ["mandate_master", "mandate_status"], glossaryScore: 82, dictionaryScore: 78, fieldsCount: 89, lastUpdated: "1 day ago", trend: 0.7 },
-      { name: "Allocations & Exposure", tables: ["client_exposure", "target_allocation"], glossaryScore: 79, dictionaryScore: 74, fieldsCount: 112, lastUpdated: "8 hours ago", trend: -0.3 },
-      { name: "Commitments", tables: ["capital_commitment"], glossaryScore: 86, dictionaryScore: 82, fieldsCount: 56, lastUpdated: "3 hours ago", trend: 3.1 }
+      { name: "Client Master", tables: ["client_master", "client_hierarchy", "client_relationship"], glossaryScore: 86, dictionaryScore: 83, fieldsCount: 56, lastUpdated: "2 hours ago", trend: 1.6 },
+      { name: "Investor Profile", tables: ["investor_profile", "investor_type"], glossaryScore: 84, dictionaryScore: 80, fieldsCount: 34, lastUpdated: "5 hours ago", trend: 2.1 },
+      { name: "Mandates", tables: ["mandate_master", "mandate_status"], glossaryScore: 80, dictionaryScore: 76, fieldsCount: 27, lastUpdated: "1 day ago", trend: 0.5 },
+      { name: "Allocations & Exposure", tables: ["client_exposure", "target_allocation"], glossaryScore: 78, dictionaryScore: 74, fieldsCount: 31, lastUpdated: "8 hours ago", trend: -0.6 },
+      { name: "Commitments", tables: ["capital_commitment"], glossaryScore: 85, dictionaryScore: 81, fieldsCount: 18, lastUpdated: "3 hours ago", trend: 2.8 }
     ]
   },
   {
     name: "Sales & CRM",
-    overallScore: 62,
-    glossaryScore: 65,
-    dictionaryScore: 59,
+    overallScore: 64,
+    glossaryScore: 67,
+    dictionaryScore: 61,
     status: "warning",
     subDomains: [
-      { name: "Accounts", tables: ["crm_account"], glossaryScore: 72, dictionaryScore: 68, fieldsCount: 89, lastUpdated: "4 hours ago", trend: 4.2 },
-      { name: "Contacts", tables: ["crm_contact"], glossaryScore: 68, dictionaryScore: 62, fieldsCount: 67, lastUpdated: "1 day ago", trend: 1.8 },
-      { name: "Activities", tables: ["meeting"], glossaryScore: 55, dictionaryScore: 48, fieldsCount: 45, lastUpdated: "2 days ago", trend: -2.1 },
-      { name: "Opportunities", tables: ["opportunity"], glossaryScore: 58, dictionaryScore: 52, fieldsCount: 78, lastUpdated: "6 hours ago", trend: -0.8 }
+      { name: "Accounts", tables: ["crm_account"], glossaryScore: 74, dictionaryScore: 70, fieldsCount: 26, lastUpdated: "4 hours ago", trend: 3.4 },
+      { name: "Contacts", tables: ["crm_contact"], glossaryScore: 70, dictionaryScore: 64, fieldsCount: 19, lastUpdated: "1 day ago", trend: 1.5 },
+      { name: "Activities", tables: ["meeting"], glossaryScore: 58, dictionaryScore: 52, fieldsCount: 14, lastUpdated: "2 days ago", trend: -1.6 },
+      { name: "Opportunities", tables: ["opportunity"], glossaryScore: 62, dictionaryScore: 56, fieldsCount: 23, lastUpdated: "6 hours ago", trend: -0.5 }
     ]
   }
 ];
