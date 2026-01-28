@@ -56,7 +56,7 @@ const Index = () => {
       {/* Main Content */}
       <main className="container mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-          <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl">
+          <TabsList className="bg-card/50 border border-border/50 p-1 rounded-xl gap-2">
             <TabsTrigger 
               value="data-sources" 
               className="gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary rounded-lg px-6 py-3"
