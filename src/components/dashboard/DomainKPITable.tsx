@@ -395,7 +395,33 @@ export const DomainKPITable = () => {
                     <td className="px-4 py-4 text-center">
                       <span className="text-muted-foreground">{totalFields > 0 ? totalFields : "--"}</span>
                     </td>
-                    <td className="px-4 py-4 text-center">—</td>
+                    <td className="px-4 py-4">
+                      {(() => {
+                        const avgTrend = domain.subDomains.length > 0
+                          ? domain.subDomains.reduce((acc, sd) => acc + sd.trend, 0) / domain.subDomains.length
+                          : 0;
+                        const roundedTrend = Math.round(avgTrend * 10) / 10;
+                        return (
+                          <div className="flex items-center justify-center gap-1">
+                            {roundedTrend > 0 ? (
+                              <TrendingUp className="w-4 h-4 text-success" />
+                            ) : roundedTrend < 0 ? (
+                              <TrendingDown className="w-4 h-4 text-destructive" />
+                            ) : (
+                              <span className="text-muted-foreground">—</span>
+                            )}
+                            {roundedTrend !== 0 && (
+                              <span className={cn(
+                                "text-sm font-medium",
+                                roundedTrend > 0 ? "text-success" : "text-destructive"
+                              )}>
+                                {roundedTrend > 0 ? "+" : ""}{roundedTrend}%
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })()}
+                    </td>
                   </tr>
                   
                   {isExpanded && domain.subDomains.map((subDomain) => (
