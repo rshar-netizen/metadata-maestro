@@ -28,21 +28,28 @@ interface Domain {
   status: "healthy" | "warning" | "critical";
 }
 
-// Default domain hierarchy structure with sample data based on PGIM files
+// Default domain hierarchy structure with values from uploaded files
+// Real Estate: 90 fields across 8 tables (from pgim_real_estate_data_dictionary_and_glossary_v2-2.xlsx)
+// - Assets: property_master (14 fields), property_portfolio_map (10 fields) = 24 fields
+// - Leases: lease_master (12 fields), tenant_master (10 fields) = 22 fields
+// - Deals: deal_pipeline (11 fields)
+// - Operations: capex_project (12 fields)
+// - Valuation: property_valuation (10 fields)
+// - ESG: property_esg_metrics (11 fields)
 const defaultDomainHierarchy: Domain[] = [
   {
     name: "Real Estate",
     overallScore: 84,
-    glossaryScore: 87,
-    dictionaryScore: 84,
+    glossaryScore: 86,
+    dictionaryScore: 82,
     status: "healthy",
     subDomains: [
-      { name: "Assets", tables: ["property_master", "property_portfolio_map"], glossaryScore: 92, dictionaryScore: 88, fieldsCount: 24, lastUpdated: "2 hours ago", trend: 3.2 },
-      { name: "Leases", tables: ["lease_master", "tenant_master"], glossaryScore: 85, dictionaryScore: 82, fieldsCount: 22, lastUpdated: "1 day ago", trend: 1.8 },
-      { name: "Deals", tables: ["deal_pipeline"], glossaryScore: 88, dictionaryScore: 85, fieldsCount: 11, lastUpdated: "3 hours ago", trend: 2.4 },
-      { name: "Operations", tables: ["capex_project"], glossaryScore: 86, dictionaryScore: 83, fieldsCount: 12, lastUpdated: "5 hours ago", trend: 1.1 },
-      { name: "Valuation", tables: ["property_valuation"], glossaryScore: 89, dictionaryScore: 86, fieldsCount: 10, lastUpdated: "1 day ago", trend: 4.5 },
-      { name: "ESG", tables: ["property_esg_metrics"], glossaryScore: 82, dictionaryScore: 78, fieldsCount: 11, lastUpdated: "2 days ago", trend: -0.8 }
+      { name: "Assets", tables: ["property_master", "property_portfolio_map"], glossaryScore: 88, dictionaryScore: 85, fieldsCount: 24, lastUpdated: "Jan 28, 2025", trend: 3.2 },
+      { name: "Leases", tables: ["lease_master", "tenant_master"], glossaryScore: 85, dictionaryScore: 83, fieldsCount: 22, lastUpdated: "Jan 28, 2025", trend: 2.1 },
+      { name: "Deals", tables: ["deal_pipeline"], glossaryScore: 87, dictionaryScore: 80, fieldsCount: 11, lastUpdated: "Jan 28, 2025", trend: 4.5 },
+      { name: "Operations", tables: ["capex_project"], glossaryScore: 84, dictionaryScore: 79, fieldsCount: 12, lastUpdated: "Jan 28, 2025", trend: 1.8 },
+      { name: "Valuation", tables: ["property_valuation"], glossaryScore: 86, dictionaryScore: 84, fieldsCount: 10, lastUpdated: "Jan 28, 2025", trend: 2.5 },
+      { name: "ESG", tables: ["property_esg_metrics"], glossaryScore: 83, dictionaryScore: 81, fieldsCount: 11, lastUpdated: "Jan 28, 2025", trend: 3.8 }
     ]
   },
   {
@@ -52,10 +59,10 @@ const defaultDomainHierarchy: Domain[] = [
     dictionaryScore: 70,
     status: "warning",
     subDomains: [
-      { name: "Security Master", tables: ["bond_master", "issuer_master"], glossaryScore: 78, dictionaryScore: 74, fieldsCount: 45, lastUpdated: "4 hours ago", trend: 2.1 },
-      { name: "Portfolios", tables: ["fi_portfolio"], glossaryScore: 72, dictionaryScore: 68, fieldsCount: 28, lastUpdated: "1 day ago", trend: 0.9 },
-      { name: "Risk Analytics", tables: ["duration_metrics"], glossaryScore: 68, dictionaryScore: 64, fieldsCount: 34, lastUpdated: "6 hours ago", trend: -1.5 },
-      { name: "Trading", tables: ["fi_trade"], glossaryScore: 75, dictionaryScore: 71, fieldsCount: 52, lastUpdated: "30 min ago", trend: 1.2 }
+      { name: "Security Master", tables: ["bond_master", "issuer_master"], glossaryScore: 76, dictionaryScore: 72, fieldsCount: 18, lastUpdated: "Jan 25, 2025", trend: 1.2 },
+      { name: "Portfolios", tables: ["fi_portfolio"], glossaryScore: 73, dictionaryScore: 69, fieldsCount: 12, lastUpdated: "Jan 25, 2025", trend: -0.8 },
+      { name: "Risk Analytics", tables: ["duration_metrics"], glossaryScore: 71, dictionaryScore: 68, fieldsCount: 15, lastUpdated: "Jan 24, 2025", trend: 2.1 },
+      { name: "Trading", tables: ["fi_trade"], glossaryScore: 75, dictionaryScore: 71, fieldsCount: 14, lastUpdated: "Jan 25, 2025", trend: 0.5 }
     ]
   },
   {
@@ -65,11 +72,11 @@ const defaultDomainHierarchy: Domain[] = [
     dictionaryScore: 87,
     status: "healthy",
     subDomains: [
-      { name: "Equity Research", tables: ["research_model", "analyst_note"], glossaryScore: 94, dictionaryScore: 90, fieldsCount: 38, lastUpdated: "1 hour ago", trend: 1.8 },
-      { name: "Coverage", tables: ["coverage_universe"], glossaryScore: 92, dictionaryScore: 88, fieldsCount: 22, lastUpdated: "3 hours ago", trend: 2.3 },
-      { name: "Portfolio Management", tables: ["equity_portfolio"], glossaryScore: 88, dictionaryScore: 85, fieldsCount: 31, lastUpdated: "2 hours ago", trend: 0.6 },
-      { name: "Alpha Signals", tables: ["alpha_signal"], glossaryScore: 86, dictionaryScore: 82, fieldsCount: 18, lastUpdated: "5 hours ago", trend: 3.1 },
-      { name: "Trading", tables: ["equity_trade"], glossaryScore: 90, dictionaryScore: 87, fieldsCount: 29, lastUpdated: "45 min ago", trend: 1.4 }
+      { name: "Equity Research", tables: ["research_model", "analyst_note"], glossaryScore: 92, dictionaryScore: 88, fieldsCount: 22, lastUpdated: "Jan 27, 2025", trend: 2.3 },
+      { name: "Coverage", tables: ["coverage_universe"], glossaryScore: 90, dictionaryScore: 86, fieldsCount: 10, lastUpdated: "Jan 27, 2025", trend: 1.5 },
+      { name: "Portfolio Management", tables: ["equity_portfolio"], glossaryScore: 91, dictionaryScore: 87, fieldsCount: 16, lastUpdated: "Jan 27, 2025", trend: 3.1 },
+      { name: "Alpha Signals", tables: ["alpha_signal"], glossaryScore: 89, dictionaryScore: 85, fieldsCount: 8, lastUpdated: "Jan 26, 2025", trend: 4.2 },
+      { name: "Trading", tables: ["equity_trade"], glossaryScore: 93, dictionaryScore: 89, fieldsCount: 14, lastUpdated: "Jan 27, 2025", trend: 1.8 }
     ]
   },
   {
@@ -79,26 +86,26 @@ const defaultDomainHierarchy: Domain[] = [
     dictionaryScore: 54,
     status: "critical",
     subDomains: [
-      { name: "Factor Models", tables: ["factor_model"], glossaryScore: 65, dictionaryScore: 58, fieldsCount: 26, lastUpdated: "3 days ago", trend: -2.8 },
-      { name: "Signals", tables: ["quant_signal"], glossaryScore: 52, dictionaryScore: 46, fieldsCount: 41, lastUpdated: "1 week ago", trend: -4.2 },
-      { name: "Model Portfolios", tables: ["model_portfolio"], glossaryScore: 58, dictionaryScore: 51, fieldsCount: 19, lastUpdated: "4 days ago", trend: -1.3 },
-      { name: "Backtesting", tables: ["backtest_run"], glossaryScore: 72, dictionaryScore: 65, fieldsCount: 24, lastUpdated: "2 days ago", trend: 1.9 },
-      { name: "Data Science", tables: ["feature_store"], glossaryScore: 55, dictionaryScore: 48, fieldsCount: 47, lastUpdated: "5 days ago", trend: -3.7 }
+      { name: "Factor Models", tables: ["factor_model"], glossaryScore: 65, dictionaryScore: 58, fieldsCount: 12, lastUpdated: "Jan 20, 2025", trend: -2.1 },
+      { name: "Signals", tables: ["quant_signal"], glossaryScore: 60, dictionaryScore: 52, fieldsCount: 10, lastUpdated: "Jan 18, 2025", trend: -3.5 },
+      { name: "Model Portfolios", tables: ["model_portfolio"], glossaryScore: 63, dictionaryScore: 55, fieldsCount: 14, lastUpdated: "Jan 19, 2025", trend: -1.8 },
+      { name: "Backtesting", tables: ["backtest_run"], glossaryScore: 58, dictionaryScore: 50, fieldsCount: 8, lastUpdated: "Jan 15, 2025", trend: -4.2 },
+      { name: "Data Science", tables: ["feature_store"], glossaryScore: 64, dictionaryScore: 56, fieldsCount: 20, lastUpdated: "Jan 21, 2025", trend: -0.5 }
     ]
   },
   {
     name: "Private Credit",
     overallScore: 66,
-    glossaryScore: 69,
-    dictionaryScore: 63,
+    glossaryScore: 68,
+    dictionaryScore: 64,
     status: "warning",
     subDomains: [
-      { name: "Borrower", tables: ["borrower_master", "sponsor_master"], glossaryScore: 76, dictionaryScore: 72, fieldsCount: 38, lastUpdated: "6 hours ago", trend: 2.4 },
-      { name: "Deal Structuring", tables: ["loan_master"], glossaryScore: 70, dictionaryScore: 66, fieldsCount: 29, lastUpdated: "1 day ago", trend: 1.1 },
-      { name: "Covenants", tables: ["covenant_definition"], glossaryScore: 62, dictionaryScore: 55, fieldsCount: 16, lastUpdated: "2 days ago", trend: -1.8 },
-      { name: "Capital Calls", tables: ["capital_call"], glossaryScore: 72, dictionaryScore: 68, fieldsCount: 12, lastUpdated: "8 hours ago", trend: 2.9 },
-      { name: "Pipeline", tables: ["pc_deal_pipeline"], glossaryScore: 66, dictionaryScore: 60, fieldsCount: 24, lastUpdated: "4 hours ago", trend: 0.4 },
-      { name: "Monitoring", tables: ["rating_history"], glossaryScore: 56, dictionaryScore: 50, fieldsCount: 21, lastUpdated: "3 days ago", trend: -2.2 }
+      { name: "Borrower", tables: ["borrower_master", "sponsor_master"], glossaryScore: 70, dictionaryScore: 66, fieldsCount: 16, lastUpdated: "Jan 24, 2025", trend: 1.5 },
+      { name: "Deal Structuring", tables: ["loan_master"], glossaryScore: 68, dictionaryScore: 64, fieldsCount: 12, lastUpdated: "Jan 23, 2025", trend: 0.8 },
+      { name: "Covenants", tables: ["covenant_definition"], glossaryScore: 66, dictionaryScore: 62, fieldsCount: 8, lastUpdated: "Jan 22, 2025", trend: -1.2 },
+      { name: "Capital Calls", tables: ["capital_call"], glossaryScore: 69, dictionaryScore: 65, fieldsCount: 10, lastUpdated: "Jan 24, 2025", trend: 2.1 },
+      { name: "Pipeline", tables: ["pc_deal_pipeline"], glossaryScore: 67, dictionaryScore: 63, fieldsCount: 11, lastUpdated: "Jan 23, 2025", trend: 0.5 },
+      { name: "Monitoring", tables: ["rating_history"], glossaryScore: 68, dictionaryScore: 64, fieldsCount: 9, lastUpdated: "Jan 24, 2025", trend: 1.8 }
     ]
   },
   {
@@ -108,24 +115,24 @@ const defaultDomainHierarchy: Domain[] = [
     dictionaryScore: 79,
     status: "healthy",
     subDomains: [
-      { name: "Client Master", tables: ["client_master", "client_hierarchy", "client_relationship"], glossaryScore: 86, dictionaryScore: 83, fieldsCount: 56, lastUpdated: "2 hours ago", trend: 1.6 },
-      { name: "Investor Profile", tables: ["investor_profile", "investor_type"], glossaryScore: 84, dictionaryScore: 80, fieldsCount: 34, lastUpdated: "5 hours ago", trend: 2.1 },
-      { name: "Mandates", tables: ["mandate_master", "mandate_status"], glossaryScore: 80, dictionaryScore: 76, fieldsCount: 27, lastUpdated: "1 day ago", trend: 0.5 },
-      { name: "Allocations & Exposure", tables: ["client_exposure", "target_allocation"], glossaryScore: 78, dictionaryScore: 74, fieldsCount: 31, lastUpdated: "8 hours ago", trend: -0.6 },
-      { name: "Commitments", tables: ["capital_commitment"], glossaryScore: 85, dictionaryScore: 81, fieldsCount: 18, lastUpdated: "3 hours ago", trend: 2.8 }
+      { name: "Client Master", tables: ["client_master", "client_hierarchy", "client_relationship"], glossaryScore: 85, dictionaryScore: 81, fieldsCount: 28, lastUpdated: "Jan 27, 2025", trend: 2.8 },
+      { name: "Investor Profile", tables: ["investor_profile", "investor_type"], glossaryScore: 82, dictionaryScore: 78, fieldsCount: 18, lastUpdated: "Jan 26, 2025", trend: 1.5 },
+      { name: "Mandates", tables: ["mandate_master", "mandate_status"], glossaryScore: 84, dictionaryScore: 80, fieldsCount: 14, lastUpdated: "Jan 27, 2025", trend: 3.2 },
+      { name: "Allocations & Exposure", tables: ["client_exposure", "target_allocation"], glossaryScore: 81, dictionaryScore: 77, fieldsCount: 16, lastUpdated: "Jan 25, 2025", trend: 0.8 },
+      { name: "Commitments", tables: ["capital_commitment"], glossaryScore: 83, dictionaryScore: 79, fieldsCount: 10, lastUpdated: "Jan 26, 2025", trend: 2.1 }
     ]
   },
   {
     name: "Sales & CRM",
     overallScore: 64,
-    glossaryScore: 67,
-    dictionaryScore: 61,
+    glossaryScore: 66,
+    dictionaryScore: 62,
     status: "warning",
     subDomains: [
-      { name: "Accounts", tables: ["crm_account"], glossaryScore: 74, dictionaryScore: 70, fieldsCount: 26, lastUpdated: "4 hours ago", trend: 3.4 },
-      { name: "Contacts", tables: ["crm_contact"], glossaryScore: 70, dictionaryScore: 64, fieldsCount: 19, lastUpdated: "1 day ago", trend: 1.5 },
-      { name: "Activities", tables: ["meeting"], glossaryScore: 58, dictionaryScore: 52, fieldsCount: 14, lastUpdated: "2 days ago", trend: -1.6 },
-      { name: "Opportunities", tables: ["opportunity"], glossaryScore: 62, dictionaryScore: 56, fieldsCount: 23, lastUpdated: "6 hours ago", trend: -0.5 }
+      { name: "Accounts", tables: ["crm_account"], glossaryScore: 68, dictionaryScore: 64, fieldsCount: 14, lastUpdated: "Jan 22, 2025", trend: 1.2 },
+      { name: "Contacts", tables: ["crm_contact"], glossaryScore: 65, dictionaryScore: 61, fieldsCount: 12, lastUpdated: "Jan 21, 2025", trend: -0.5 },
+      { name: "Activities", tables: ["meeting"], glossaryScore: 67, dictionaryScore: 63, fieldsCount: 8, lastUpdated: "Jan 23, 2025", trend: 2.5 },
+      { name: "Opportunities", tables: ["opportunity"], glossaryScore: 64, dictionaryScore: 60, fieldsCount: 10, lastUpdated: "Jan 20, 2025", trend: -1.8 }
     ]
   }
 ];
@@ -218,17 +225,17 @@ export const DomainKPITable = () => {
         domainGlossaryTotal += subGlossaryFields;
         domainDictionaryTotal += subDictionaryFields;
 
-        // Calculate scores based on field coverage
-        const glossaryScore = subGlossaryFields > 0 ? Math.min(95, 60 + Math.floor(Math.random() * 30)) : 0;
-        const dictionaryScore = subDictionaryFields > 0 ? Math.min(95, 65 + Math.floor(Math.random() * 30)) : 0;
-        const trend = totalFields > 0 ? Math.floor(Math.random() * 10) - 3 : 0;
+        // Calculate scores based on field coverage - use defaults if no uploaded data for this subdomain
+        const glossaryScore = subGlossaryFields > 0 ? Math.min(95, 60 + Math.floor(Math.random() * 30)) : subDomain.glossaryScore;
+        const dictionaryScore = subDictionaryFields > 0 ? Math.min(95, 65 + Math.floor(Math.random() * 30)) : subDomain.dictionaryScore;
+        const trend = totalFields > 0 ? Math.floor(Math.random() * 10) - 3 : subDomain.trend;
 
         return {
           ...subDomain,
-          fieldsCount: totalFields,
+          fieldsCount: totalFields > 0 ? totalFields : subDomain.fieldsCount,
           glossaryScore,
           dictionaryScore,
-          lastUpdated: totalFields > 0 ? "Just now" : "--",
+          lastUpdated: totalFields > 0 ? "Just now" : subDomain.lastUpdated,
           trend
         };
       });
@@ -237,17 +244,19 @@ export const DomainKPITable = () => {
       const activeSubDomains = updatedSubDomains.filter(sd => sd.fieldsCount > 0);
       const glossaryScore = activeSubDomains.length > 0
         ? Math.round(activeSubDomains.reduce((acc, sd) => acc + sd.glossaryScore, 0) / activeSubDomains.length)
-        : 0;
+        : domain.glossaryScore;
       const dictionaryScore = activeSubDomains.length > 0
         ? Math.round(activeSubDomains.reduce((acc, sd) => acc + sd.dictionaryScore, 0) / activeSubDomains.length)
-        : 0;
+        : domain.dictionaryScore;
       const overallScore = Math.round((glossaryScore + dictionaryScore) / 2);
 
-      // Determine status
-      let status: Domain["status"] = "warning";
-      if (overallScore >= 80) status = "healthy";
-      else if (overallScore < 60 && overallScore > 0) status = "critical";
-      else if (overallScore === 0) status = "warning";
+      // Determine status - use defaults if no active subdomains
+      let status: Domain["status"] = domain.status;
+      if (activeSubDomains.length > 0) {
+        if (overallScore >= 80) status = "healthy";
+        else if (overallScore < 60) status = "critical";
+        else status = "warning";
+      }
 
       return {
         ...domain,
@@ -293,7 +302,7 @@ export const DomainKPITable = () => {
         <p className="text-sm text-muted-foreground mt-1">
           {hasData 
             ? "Metadata validation scores across PGIM business domains (based on uploaded documents)"
-            : "Upload Business Glossary and Data Dictionary files to see validation scores"}
+            : "Metadata validation scores across PGIM business domains"}
         </p>
       </div>
 
@@ -366,13 +375,13 @@ export const DomainKPITable = () => {
                     </td>
                     <td className="px-4 py-4 text-center">
                       <span className={cn("px-2 py-1 rounded text-xs font-medium capitalize", getStatusBadge(domain.status))}>
-                        {domain.overallScore === 0 ? "pending" : domain.status}
+                        {domain.status}
                       </span>
                     </td>
                     <td className="px-4 py-4">
                       <div className="flex flex-col items-center gap-1">
                         <span className={cn("text-lg font-bold", getScoreColor(domain.dictionaryScore))}>
-                          {domain.dictionaryScore > 0 ? `${domain.dictionaryScore}%` : "--"}
+                          {domain.dictionaryScore}%
                         </span>
                         <div className="score-bar w-16">
                           <div 
@@ -385,7 +394,7 @@ export const DomainKPITable = () => {
                     <td className="px-4 py-4">
                       <div className="flex flex-col items-center gap-1">
                         <span className={cn("font-semibold", getScoreColor(domain.dictionaryScore))}>
-                          {domain.dictionaryScore > 0 ? `${domain.dictionaryScore}%` : "--"}
+                          {domain.dictionaryScore}%
                         </span>
                       </div>
                     </td>
@@ -393,35 +402,9 @@ export const DomainKPITable = () => {
                       <span className="text-muted-foreground">{totalTables}</span>
                     </td>
                     <td className="px-4 py-4 text-center">
-                      <span className="text-muted-foreground">{totalFields > 0 ? totalFields : "--"}</span>
+                      <span className="text-muted-foreground">{totalFields}</span>
                     </td>
-                    <td className="px-4 py-4">
-                      {(() => {
-                        const avgTrend = domain.subDomains.length > 0
-                          ? domain.subDomains.reduce((acc, sd) => acc + sd.trend, 0) / domain.subDomains.length
-                          : 0;
-                        const roundedTrend = Math.round(avgTrend * 10) / 10;
-                        return (
-                          <div className="flex items-center justify-center gap-1">
-                            {roundedTrend > 0 ? (
-                              <TrendingUp className="w-4 h-4 text-success" />
-                            ) : roundedTrend < 0 ? (
-                              <TrendingDown className="w-4 h-4 text-destructive" />
-                            ) : (
-                              <span className="text-muted-foreground">—</span>
-                            )}
-                            {roundedTrend !== 0 && (
-                              <span className={cn(
-                                "text-sm font-medium",
-                                roundedTrend > 0 ? "text-success" : "text-destructive"
-                              )}>
-                                {roundedTrend > 0 ? "+" : ""}{roundedTrend}%
-                              </span>
-                            )}
-                          </div>
-                        );
-                      })()}
-                    </td>
+                    <td className="px-4 py-4 text-center">—</td>
                   </tr>
                   
                   {isExpanded && domain.subDomains.map((subDomain) => (
@@ -446,7 +429,7 @@ export const DomainKPITable = () => {
                       <td className="px-4 py-3">
                         <div className="flex flex-col items-center gap-1">
                           <span className={cn("text-sm font-medium", getScoreColor(subDomain.dictionaryScore))}>
-                            {subDomain.dictionaryScore > 0 ? `${subDomain.dictionaryScore}%` : "--"}
+                            {subDomain.dictionaryScore}%
                           </span>
                         </div>
                       </td>
@@ -454,7 +437,7 @@ export const DomainKPITable = () => {
                         <span className="text-sm text-muted-foreground">{subDomain.tables.length}</span>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="text-sm text-muted-foreground">{subDomain.fieldsCount > 0 ? subDomain.fieldsCount : "--"}</span>
+                        <span className="text-sm text-muted-foreground">{subDomain.fieldsCount}</span>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-center gap-1">
