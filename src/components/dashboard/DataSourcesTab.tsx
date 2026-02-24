@@ -136,7 +136,7 @@ export const DataSourcesTab = () => {
       {/* Upload Section */}
       <div>
         <h2 className="text-xl font-semibold text-foreground mb-4">Upload Data Sources</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FileUploadZone
             title="Business Glossary"
             description="Upload your organization's business glossary definitions"
@@ -158,18 +158,6 @@ export const DataSourcesTab = () => {
             onFileUpload={async (file) => {
               await handleDictionaryUpload(file);
             }}
-          />
-          <FileUploadZone
-            title="Policy and Other Documents"
-            description="Upload compliance and governance policy documents"
-            acceptedFormats="PDF, DOCX, TXT"
-            accept=".pdf,.docx,.txt"
-          />
-          <FileUploadZone
-            title="Sample Dataset"
-            description="Upload sample data for validation testing"
-            acceptedFormats="CSV, Parquet, JSON"
-            accept=".csv,.parquet,.json"
           />
         </div>
       </div>
